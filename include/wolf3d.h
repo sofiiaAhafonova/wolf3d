@@ -20,4 +20,6 @@ typedef struct  s_env
 }               t_env;
 
 void            del_node(void *cont, size_t size);
+t_map           *get_map(char *file_name);
+void            remove_map(t_map *map);
 #endif

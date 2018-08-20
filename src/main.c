@@ -11,8 +11,22 @@ int     ft_print_error(char *err)
 int     main(int argc, char **argv)
 {
 
+    int i = -1;
+    char *buf;
     if (argc != 2)
         return (ft_print_error("Usage: ./wolf3d [map_file]"));
+    t_map *m = get_map(argv[1]);
+    if (m)
+    {
+        while(++i < m->height)
+        {
+            buf = m->data[i];
+            ft_putendl(buf);
+        }
+
+    }
+    remove_map(m);
+    system("leaks wolf3d");
 
 /*
 t_env env;
