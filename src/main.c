@@ -10,45 +10,28 @@ int     ft_print_error(char *err)
 
 int     main(int argc, char **argv)
 {
-
+    t_env env;
     int i = -1;
     char *buf;
     if (argc != 2)
         return (ft_print_error("Usage: ./wolf3d [map_file]"));
-    t_map *m = get_map(argv[1]);
-    if (m)
+    env.map = get_map(argv[1]);
+    if (env.map)
     {
-        while(++i < m->height)
+        while(++i < env.map->height)
         {
-            buf = m->data[i];
+            buf = env.map->data[i];
             ft_putendl(buf);
         }
-
     }
-    remove_map(m);
     system("leaks wolf3d");
-
-/*
-t_env env;
-int i;
-
-ft_putendrt");
-SDL_Init(SDL_INIT_VIDEO);
-SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_WIDTH, 0, &(env.window), &(env.renderer));
-SDL_SetRenderDrawColor(env.renderer, 0, 0, 0, 0);
-SDL_RenderClear(env.renderer);
-SDL_SetRenderDrawColor(env.renderer, 255, 0, 0, 255);
-for (i = 0; i < WINDOW_WIDTH; ++i)
-    SDL_RenderDrawPoint(env.renderer, i, i);
-SDL_RenderPresent(env.renderer);
-while (1)
-{
-    if (SDL_PollEvent(&env.event) && env.event.type == SDL_QUIT)
-        break;
-}
-SDL_DestroyRenderer(env.renderer);
-SDL_DestroyWindow(env.window);
-SDL_Quit();
- */
+    SDL_Init(SDL_INIT_VIDEO);
+    SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_WIDTH, 0, &(env.window), &(env.renderer));
+    SDL_SetRenderDrawColor(env.renderer, 12, 200, 110, 0);
+    SDL_RenderClear(env.renderer);
+    SDL_RenderPresent(env.renderer);
+    main_loop(env);
+    remove_env(env);
+    system("leaks wolf3d");
     return EXIT_SUCCESS;
 }

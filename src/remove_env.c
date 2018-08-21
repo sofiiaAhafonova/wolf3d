@@ -21,3 +21,11 @@ void    remove_map(t_map *map)
     }
     free(map);
 }
+
+void    remove_env(t_env env)
+{
+    remove_map(env.map);
+    SDL_DestroyRenderer(env.renderer);
+    SDL_DestroyWindow(env.window);
+    SDL_Quit();
+}
