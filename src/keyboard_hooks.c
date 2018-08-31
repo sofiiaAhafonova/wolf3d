@@ -13,23 +13,23 @@ void            key_up_events(t_env env)
 
 void            mouse_down_events(t_env env)
 {
-    if (env.event.button.button == SDL_BUTTON_LEFT)
-    {
-        SDL_SetRenderDrawColor(env.renderer, 0, 0, 0, 0);
-        SDL_RenderClear(env.renderer);
-        SDL_RenderPresent(env.renderer);
-    }
+//    if (env.event.button.button == SDL_BUTTON_LEFT)
+//    {
+//        SDL_SetRenderDrawColor(env.renderer, 0, 0, 0, 0);
+//        SDL_RenderClear(env.renderer);
+//        SDL_RenderPresent(env.renderer);
+//    }
 
 }
 
 void            mouse_up_events(t_env env)
 {
-    if (env.event.button.button == SDL_BUTTON_LEFT)
-    {
-        SDL_SetRenderDrawColor(env.renderer, 12, 200, 110, 0);
-        SDL_RenderClear(env.renderer);
-        SDL_RenderPresent(env.renderer);
-    }
+//    if (env.event.button.button == SDL_BUTTON_LEFT)
+//    {
+//        SDL_SetRenderDrawColor(env.renderer, 12, 200, 110, 0);
+//        SDL_RenderClear(env.renderer);
+//        SDL_RenderPresent(env.renderer);
+//    }
 }
 
 void            mouse_move_events(t_env env)
