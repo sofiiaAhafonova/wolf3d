@@ -27,9 +27,6 @@ int     main(int argc, char **argv)
     system("leaks wolf3d");
     SDL_Init(SDL_INIT_VIDEO);
     SDL_CreateWindowAndRenderer(w, h, 0, &(env->window), &(env->renderer));
-    SDL_SetRenderDrawColor(env->renderer, 12, 200, 110, 0);
-    SDL_RenderClear(env->renderer);
-    SDL_RenderPresent(env->renderer);
     main_loop(env);
     remove_env(env);
     system("leaks wolf3d");

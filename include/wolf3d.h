@@ -6,8 +6,8 @@
 #include "libft.h"
 
 # define FOV 60;
-# define WIN_WIDTH 512;
-# define WIN_HEIGHT 384;
+# define WIN_WIDTH 1024;
+# define WIN_HEIGHT 512;
 # define ray_angle 60 / WIN_WIDTH;
 # define projection_plane_dist 277
 

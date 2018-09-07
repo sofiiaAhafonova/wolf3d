@@ -15,8 +15,8 @@ t_env   *init_env(t_map *m)
         remove_env(env);
         return (NULL);
     };
-    env->player->pos_x = 22;
-    env->player->pos_y = 12;
+    env->player->pos_x = 2;
+    env->player->pos_y = 2;
     env->player->dir_x = -1;
     env->player->dir_y = 0;
     env->player->plane_x = 0;
