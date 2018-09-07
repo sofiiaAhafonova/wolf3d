@@ -22,10 +22,16 @@ void    remove_map(t_map *map)
     free(map);
 }
 
-void    remove_env(t_env env)
+void    remove_env(t_env *env)
 {
-    remove_map(env.map);
-    SDL_DestroyRenderer(env.renderer);
-    SDL_DestroyWindow(env.window);
+    if (env->map)
+        remove_map(env->map);
+    if (env->renderer)
+        SDL_DestroyRenderer(env->renderer);
+    if (env->window)
+       SDL_DestroyWindow(env->window);
+    if (env->player)
+        free(env->player);
+    free(env);
     SDL_Quit();
 }

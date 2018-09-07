@@ -6,20 +6,11 @@
 #include "libft.h"
 
 # define FOV 60;
-# define projection_plane_width 320;
-# define projection_plane_height 200;
-# define ray_angle 60 / projection_plane_width;
-# define projection_plane_dist 0.5 * projection_plane_width / tan (0.5 * FOV);
-#define ANGLE60 320 //projection_plane_width;
-#define ANGLE30 160 //ANGLE60/2;
-#define ANGLE15 80 //ANGLE30/2;
-#define ANGLE90 480 //ANGLE30*3;
-#define ANGLE180 960 //ANGLE90*2;
-#define ANGLE270 1440 // ANGLE90*3;
-#define ANGLE360 1920 //ANGLE60*6;
-#define ANGLE0 0;
-#define ANGLE5 26 //ANGLE30/6;
-#define ANGLE10 52 //ANGLE5*2;
+# define WIN_WIDTH 512;
+# define WIN_HEIGHT 384;
+# define ray_angle 60 / WIN_WIDTH;
+# define projection_plane_dist 277
+
 
 
 typedef struct  s_map
@@ -31,11 +22,21 @@ typedef struct  s_map
 
 typedef struct  s_player
 {
-    double x;
-    double y;
-    double direction;
+    double pos_x;
+    double pos_y;
+    double dir_x;
+    double dir_y;
+    double plane_x;
+    double plane_y;
 
 }               t_player;
+
+typedef struct  s_color
+{
+    Uint8 r;
+    Uint8 g;
+    Uint8 b;
+}               t_color;
 
 typedef struct  s_env
 {
@@ -43,14 +44,17 @@ typedef struct  s_env
     SDL_Renderer    *renderer;
     SDL_Event       event;
     t_map           *map;
-    float           sin_table[ANGLE360];
-    float           cos_table[ANGLE360];
-    float           tan_table[ANGLE360];
+    t_player        *player;
+    t_color         c;
+
 }               t_env;
 
+t_env           *init_env(t_map *m);
 void            del_node(void *cont, size_t size);
 t_map           *get_map(char *file_name);
 void            remove_map(t_map *map);
-void            main_loop(t_env env);
-void            remove_env(t_env env);
+void            main_loop(t_env *env);
+void            remove_env(t_env *env);
+int     raycast(t_env *e);
+
 #endif
