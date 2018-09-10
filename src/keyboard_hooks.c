@@ -3,10 +3,10 @@
 
 void            key_down_events(t_env *env)
 {
-    double  rotSpeed = 0.1;
+    double  rotSpeed = M_PI/180;
     double oldDirX = env->player->dir_x;
     double oldPlaneX = env->player->plane_x;
-    double moveSpeed = 0.1;
+    double moveSpeed = 0.05;
 
     if (env->event.key.keysym.sym == SDLK_UP)
     {
