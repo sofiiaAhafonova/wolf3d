@@ -9,12 +9,13 @@ int		vertical_line(int x, int drawStart, int drawEnd, t_env *e)
         SDL_RenderDrawPoint(e->renderer, x ,drawStart);
         drawStart++;
     }
-    SDL_RenderPresent(e->renderer);
     return (0);
 }
 
 int     raycast(t_env *e)
 {
+    SDL_SetRenderDrawColor(e->renderer, 0,  0,  0, 0);
+    SDL_RenderClear(e->renderer);
     int w = WIN_WIDTH;
     int h = WIN_HEIGHT;
     for(int x = 0; x < w; x++)
@@ -117,5 +118,6 @@ int     raycast(t_env *e)
         //draw the pixels of the stripe as a vertical line
         vertical_line(x, drawStart, drawEnd, e);
     }
+    SDL_RenderPresent(e->renderer);
     return (0);
 }

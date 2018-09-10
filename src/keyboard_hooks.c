@@ -3,7 +3,7 @@
 
 void            key_down_events(t_env *env)
 {
-    double  rotSpeed = 1;
+    double  rotSpeed = 0.1;
     double oldDirX = env->player->dir_x;
     double oldPlaneX = env->player->plane_x;
     double moveSpeed = 0.1;
