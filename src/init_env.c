@@ -21,6 +21,8 @@ t_env   *init_env(t_map *m)
     env->player->dir_y = 0;
     env->player->plane_x = 0;
     env->player->plane_y = 0.66; /* 2d raycaster version of camera plane*/
-
+    env->player->rotation_speed = 0.05;
+    env->player->move_speed = 0.05;
+    env->player->accel = false;
     return (env);
 }

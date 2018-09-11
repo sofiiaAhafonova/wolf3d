@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include <math.h>
+#include <stdbool.h>
 #include "libft.h"
 
 # define FOV 60;
@@ -28,6 +29,9 @@ typedef struct  s_player
     double dir_y;
     double plane_x;
     double plane_y;
+    double rotation_speed;
+    double move_speed;
+    bool   accel;
 
 }               t_player;
 
