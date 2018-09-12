@@ -22,11 +22,7 @@ int     main(int argc, char **argv)
             ft_putendl(buf);
         }
     }
-    int w = WIN_WIDTH;
-    int h = WIN_HEIGHT;
     system("leaks wolf3d");
-    SDL_Init(SDL_INIT_VIDEO);
-    SDL_CreateWindowAndRenderer(w, h, 0, &(env->window), &(env->renderer));
     main_loop(env);
     remove_env(env);
     system("leaks wolf3d");

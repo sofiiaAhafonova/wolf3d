@@ -6,14 +6,6 @@
 #include <stdbool.h>
 #include "libft.h"
 
-# define FOV 60;
-# define WIN_WIDTH 1024;
-# define WIN_HEIGHT 512;
-# define ray_angle 60 / WIN_WIDTH;
-# define projection_plane_dist 277
-
-
-
 typedef struct  s_map
 {
     unsigned int    height;
@@ -21,17 +13,27 @@ typedef struct  s_map
     char            **data;
 }               t_map;
 
+typedef struct  s_point
+{
+    double x;
+    double y;
+}               t_point;
 typedef struct  s_player
 {
-    double pos_x;
-    double pos_y;
-    double dir_x;
-    double dir_y;
-    double plane_x;
-    double plane_y;
-    double rotation_speed;
-    double move_speed;
-    bool   accel;
+    t_point pos;
+    t_point dir;
+    t_point plane;
+    t_point delta_dist;
+    t_point side_dist;
+    t_point ray_dir;
+    double  camera;
+    double  rotation_speed;
+    double  move_speed;
+    int     screen_width;
+    int     screen_height;
+    int hit; //was there a wall hit?
+    int side;
+    bool    accel;
 
 }               t_player;
 

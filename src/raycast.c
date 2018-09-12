@@ -14,89 +14,78 @@ int		vertical_line(int x, int drawStart, int drawEnd, t_env *e)
 
 int     raycast(t_env *e)
 {
+    SDL_Point   step;
+    SDL_Point   map;
+    int drawStart;
+    double perpWallDist;
+    int drawEnd;
+    int lineHeight;
+    int x;
+
     SDL_SetRenderDrawColor(e->renderer, 0,  0,  0, 0);
     SDL_RenderClear(e->renderer);
-    int w = WIN_WIDTH;
-    int h = WIN_HEIGHT;
-    for(int x = 0; x < w; x++)
+    x = -1;
+    while (++x < e->player->screen_width)
     {
         //calculate ray position and direction
-        double cameraX = 2 * x / (w * 1.0) - 1; //x-coordinate in camera space
-        double rayDirX = e->player->dir_x + e->player->plane_x * cameraX;
-        double rayDirY = e->player->dir_y+ e->player->plane_y * cameraX;
+        e->player->camera = 2 * x / (e->player->screen_width * 1.0) - 1; //x-coordinate in camera space
+        e->player->ray_dir.x = e->player->dir.x + e->player->plane.x * e->player->camera;
+        e->player->ray_dir.y = e->player->dir.y+ e->player->plane.y * e->player->camera;
         //which box of the map we're in
-        int mapX = (int) e->player->pos_x;
-        int mapY = (int) e->player->pos_y;
-
-        //length of ray from current position to next x or y-side
-        double sideDistX;
-        double sideDistY;
-
-        //length of ray from one x or y-side to next x or y-side
-        double deltaDistX = fabs(1 / rayDirX);
-        double deltaDistY = fabs(1 / rayDirY);
-        double perpWallDist;
-
-        //what direction to step in x or y-direction (either +1 or -1)
-        int stepX;
-        int stepY;
-
-        int hit = 0; //was there a wall hit?
-        int side = 0; //was a NS or a EW wall hit?
-        //calculate step and initial sideDist
-        if (rayDirX < 0)
+        map.x = (int) e->player->pos.x;
+        map.y = (int) e->player->pos.y;
+        e->player->delta_dist.x = fabs(1 / e->player->ray_dir.x);
+        e->player->delta_dist.y = fabs(1 / e->player->ray_dir.y);
+        e->player->hit = 0; //was there a wall hit?
+        e->player->side = 0; //was a NS or a EW wall hit?
+        if (e->player->ray_dir.x < 0)
         {
-            stepX = -1;
-            sideDistX = (e->player->pos_x - mapX) * deltaDistX;
+            step.x = -1;
+            e->player->side_dist.x = (e->player->pos.x - map.x) * e->player->delta_dist.x;
         }
         else
         {
-            stepX = 1;
-            sideDistX = (mapX + 1.0 - e->player->pos_x) * deltaDistX;
+            step.x = 1;
+            e->player->side_dist.x = (map.x + 1.0 - e->player->pos.x) * e->player->delta_dist.x;
         }
-        if (rayDirY < 0)
+        if (e->player->ray_dir.y < 0)
         {
-            stepY = -1;
-            sideDistY = (e->player->pos_y - mapY) * deltaDistY;
+            step.y = -1;
+            e->player->side_dist.y = (e->player->pos.y - map.y) * e->player->delta_dist.y;
         }
         else
         {
-            stepY = 1;
-            sideDistY = (mapY + 1.0 - e->player->pos_y) * deltaDistY;
+            step.y = 1;
+            e->player->side_dist.y = (map.y + 1.0 - e->player->pos.y) * e->player->delta_dist.y;
         }
-        //perform DDA
-        while (hit == 0)
+        while (e->player->hit == 0)
         {
-            //jump to next map square, OR in x-direction, OR in y-direction
-            if (sideDistX < sideDistY)
+            if (e->player->side_dist.x < e->player->side_dist.y)
             {
-                sideDistX += deltaDistX;
-                mapX += stepX;
-                side = 0;
+                e->player->side_dist.x += e->player->delta_dist.x;
+                map.x += step.x;
+                e->player->side = 0;
             }
             else
             {
-                sideDistY += deltaDistY;
-                mapY += stepY;
-                side = 1;
+                e->player->side_dist.y += e->player->delta_dist.y;
+                map.y += step.y;
+                e->player->side = 1;
             }
-            //Check if ray has hit a wall
-            if (e->map->data[mapX][mapY] != '0') hit = 1;
+            if (e->map->data[map.x][map.y] != '0') e->player->hit = 1;
         }
-        //Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
-        if (side == 0) perpWallDist = (mapX - e->player->pos_x + (1 - stepX) / 2) / rayDirX;
-        else           perpWallDist = (mapY - e->player->pos_y + (1 - stepY) / 2) / rayDirY;
-
-        //Calculate height of line to draw on screen
-        int lineHeight = (int)(h / perpWallDist);
-
-        //calculate lowest and highest pixel to fill in current stripe
-        int drawStart = -lineHeight / 2 + h / 2;
-        if(drawStart < 0)drawStart = 0;
-        int drawEnd = lineHeight / 2 + h / 2;
-        if(drawEnd >= h)drawEnd = h - 1;
-
-        if (e->map->data[mapX][mapY] == '1')
+        if (e->player->side == 0)
+            perpWallDist = (map.x - e->player->pos.x + (1 - step.x) / 2) / e->player->ray_dir.x;
+        else
+            perpWallDist = (map.y - e->player->pos.y + (1 - step.y) / 2) / e->player->ray_dir.y;
+        lineHeight = (int)(e->player->screen_height / perpWallDist);
+        drawStart = -lineHeight / 2 + e->player->screen_height / 2;
+        if (drawStart < 0)
+            drawStart = 0;
+        drawEnd = lineHeight / 2 + e->player->screen_height / 2;
+        if (drawEnd >= e->player->screen_height)
+            drawEnd = e->player->screen_height - 1;
+        if (e->map->data[map.x][map.y] == '1')
         {
             e->c.r= 48;
             e->c.g = 190;
@@ -108,14 +97,12 @@ int     raycast(t_env *e)
             e->c.g = 190;
             e->c.b = 190;
         }
-        if (side == 1)
+        if (e->player->side == 1)
         {
             e->c.r /= 2;
             e->c.g /= 2;
             e->c.b /= 2;
         }
-
-        //draw the pixels of the stripe as a vertical line
         vertical_line(x, drawStart, drawEnd, e);
     }
     SDL_RenderPresent(e->renderer);

@@ -3,24 +3,24 @@
 
 bool            rotation_keys(t_env *env)
 {
-    double oldDirX;
-    double oldPlaneX;
+    double old_dir_x;
+    double old_plane_x;
 
-    oldDirX = env->player->dir_x;
-    oldPlaneX = env->player->plane_x;
+    old_dir_x = env->player->dir.x;
+    old_plane_x = env->player->plane.x;
     if (env->event.key.keysym.sym == SDLK_RIGHT)
     {
-        env->player->dir_x = env->player->dir_x * cos(-env->player->rotation_speed) - env->player->dir_y * sin(-env->player->rotation_speed);
-        env->player->dir_y = oldDirX * sin(-env->player->rotation_speed) + env->player->dir_y * cos(-env->player->rotation_speed);
-        env->player->plane_x = env->player->plane_x * cos(-env->player->rotation_speed) - env->player->plane_y * sin(-env->player->rotation_speed);
-        env->player->plane_y = oldPlaneX * sin(-env->player->rotation_speed) + env->player->plane_y * cos(-env->player->rotation_speed);
+        env->player->dir.x = env->player->dir.x * cos(-env->player->rotation_speed) - env->player->dir.y * sin(-env->player->rotation_speed);
+        env->player->dir.y = old_dir_x * sin(-env->player->rotation_speed) + env->player->dir.y * cos(-env->player->rotation_speed);
+        env->player->plane.x = env->player->plane.x * cos(-env->player->rotation_speed) - env->player->plane.y * sin(-env->player->rotation_speed);
+        env->player->plane.y = old_plane_x * sin(-env->player->rotation_speed) + env->player->plane.y * cos(-env->player->rotation_speed);
     }
     else if (env->event.key.keysym.sym == SDLK_LEFT)
     {
-        env->player->dir_x = env->player->dir_x * cos(env->player->rotation_speed) - env->player->dir_y * sin(env->player->rotation_speed);
-        env->player->dir_y = oldDirX * sin(env->player->rotation_speed) + env->player->dir_y * cos(env->player->rotation_speed);
-        env->player->plane_x = env->player->plane_x * cos(env->player->rotation_speed) - env->player->plane_y * sin(env->player->rotation_speed);
-        env->player->plane_y= oldPlaneX * sin(env->player->rotation_speed) + env->player->plane_y * cos(env->player->rotation_speed);
+        env->player->dir.x = env->player->dir.x * cos(env->player->rotation_speed) - env->player->dir.y * sin(env->player->rotation_speed);
+        env->player->dir.y = old_dir_x * sin(env->player->rotation_speed) + env->player->dir.y * cos(env->player->rotation_speed);
+        env->player->plane.x = env->player->plane.x * cos(env->player->rotation_speed) - env->player->plane.y * sin(env->player->rotation_speed);
+        env->player->plane.y= old_plane_x * sin(env->player->rotation_speed) + env->player->plane.y * cos(env->player->rotation_speed);
     }
     else
         return (false);
@@ -46,13 +46,13 @@ void            key_down_events(t_env *env)
     }
     if (env->event.key.keysym.sym == SDLK_UP)
     {
-        if(env->map->data[(int)(env->player->pos_x + env->player->dir_x * env->player->move_speed)][(int)(env->player->pos_y)] == '0') env->player->pos_x += env->player->dir_x * env->player->move_speed;
-        if(env->map->data[(int)(env->player->pos_x)][(int)(env->player->pos_y + env->player->dir_y * env->player->move_speed)] == '0') env->player->pos_y += env->player->dir_y * env->player->move_speed;
+        if(env->map->data[(int)(env->player->pos.x + env->player->dir.x * env->player->move_speed)][(int)(env->player->pos.y)] == '0') env->player->pos.x += env->player->dir.x * env->player->move_speed;
+        if(env->map->data[(int)(env->player->pos.x)][(int)(env->player->pos.y + env->player->dir.y * env->player->move_speed)] == '0') env->player->pos.y += env->player->dir.y * env->player->move_speed;
     }
     else if (env->event.key.keysym.sym == SDLK_DOWN)
     {
-        if(env->map->data[(int)(env->player->pos_x - env->player->dir_x * env->player->move_speed)][(int)(env->player->pos_y)] == '0') env->player->pos_x -= env->player->dir_x * env->player->move_speed;
-        if(env->map->data[(int)(env->player->pos_x)][(int)(env->player->pos_y - env->player->dir_y * env->player->move_speed)] == '0') env->player->pos_y -= env->player->dir_y * env->player->move_speed;
+        if(env->map->data[(int)(env->player->pos.x - env->player->dir.x * env->player->move_speed)][(int)(env->player->pos.y)] == '0') env->player->pos.x -= env->player->dir.x * env->player->move_speed;
+        if(env->map->data[(int)(env->player->pos.x)][(int)(env->player->pos.y - env->player->dir.y * env->player->move_speed)] == '0') env->player->pos.y -= env->player->dir.y * env->player->move_speed;
     } else if (!rotation_keys(env))
         return;
     raycast(env);
