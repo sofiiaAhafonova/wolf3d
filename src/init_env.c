@@ -20,7 +20,7 @@ t_env   *init_env(t_map *m)
     env->pl->dir.x = -1;
     env->pl->dir.y = 0;
     env->pl->plane.x = 0;
-    env->pl->plane.y = 0.66; /* 2d raycaster version of camera plane*/
+    env->pl->plane.y = 0.66;
     env->pl->rotation_speed = 0.05;
     env->pl->move_speed = 0.05;
     env->pl->accel = false;

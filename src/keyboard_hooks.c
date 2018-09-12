@@ -37,28 +37,33 @@ bool            rotate_left(t_env *env)
     env->pl->plane.y= buf * sin(env->pl->rotation_speed)
             + env->pl->plane.y * cos(env->pl->rotation_speed);
     return (true);
-
 }
+
 bool            move_back_forth(t_env *env)
 {
     if (env->event.key.keysym.sym == SDLK_UP)
     {
-        if (env->map->data[(int)(env->pl->pos.x + env->pl->dir.x * env->pl->move_speed)][(int)(env->pl->pos.y)] == '0')
+        if (env->map->data[(int)(env->pl->pos.x + env->pl->dir.x *
+            env->pl->move_speed)][(int)(env->pl->pos.y)] == '0')
             env->pl->pos.x += env->pl->dir.x * env->pl->move_speed;
-        if (env->map->data[(int)(env->pl->pos.x)][(int)(env->pl->pos.y + env->pl->dir.y * env->pl->move_speed)] == '0')
+        if (env->map->data[(int)(env->pl->pos.x)][(int)(env->pl->pos.y +
+            env->pl->dir.y * env->pl->move_speed)] == '0')
             env->pl->pos.y += env->pl->dir.y * env->pl->move_speed;
     }
     else if (env->event.key.keysym.sym == SDLK_DOWN)
     {
-        if (env->map->data[(int)(env->pl->pos.x - env->pl->dir.x * env->pl->move_speed)][(int)(env->pl->pos.y)] == '0')
+        if (env->map->data[(int)(env->pl->pos.x - env->pl->dir.x *
+            env->pl->move_speed)][(int)(env->pl->pos.y)] == '0')
             env->pl->pos.x -= env->pl->dir.x * env->pl->move_speed;
-        if (env->map->data[(int)(env->pl->pos.x)][(int)(env->pl->pos.y - env->pl->dir.y * env->pl->move_speed)] == '0')
+        if (env->map->data[(int)(env->pl->pos.x)][(int)(env->pl->pos.y -
+            env->pl->dir.y * env->pl->move_speed)] == '0')
             env->pl->pos.y -= env->pl->dir.y * env->pl->move_speed;
     }
     else
         return (false);
     return (true);
 }
+
 void            key_down_events(t_env *env)
 {
 

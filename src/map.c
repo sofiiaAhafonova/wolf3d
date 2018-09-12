@@ -37,10 +37,12 @@ t_map   *create_map(t_list *lst, unsigned int width, unsigned int height)
     t_list  *buf;
 
     map = NULL;
-    if (!lst || !(map = (t_map *)malloc(sizeof(t_map))) ||  !(map->data = (char**)malloc(sizeof(char*) * height)))
+    if (!lst || !(map = (t_map *)malloc(sizeof(t_map))) ||
+        !(map->data = (char**)malloc(sizeof(char*) * height)))
     {
         map ? free(map) : 0;
-        lst ? ft_putendl("Map creating error") : ft_putendl("Wrong map file format");
+        lst ? ft_putendl("Map creating error") :
+        ft_putendl("Wrong map file format");
         lst ? ft_lstdel(&lst, &del_node) : 0;
         return (NULL);
     }
