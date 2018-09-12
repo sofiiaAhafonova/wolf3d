@@ -30,8 +30,8 @@ void    remove_env(t_env *env)
         SDL_DestroyRenderer(env->renderer);
     if (env->window)
        SDL_DestroyWindow(env->window);
-    if (env->player)
-        free(env->player);
+    if (env->pl)
+        free(env->pl);
     free(env);
     SDL_Quit();
 }

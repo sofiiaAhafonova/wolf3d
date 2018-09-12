@@ -1,59 +1,82 @@
 #include "wolf3d.h"
 
 
-bool            rotation_keys(t_env *env)
+bool            rotate_right(t_env *env)
 {
-    double old_dir_x;
-    double old_plane_x;
+    double buf;
 
-    old_dir_x = env->player->dir.x;
-    old_plane_x = env->player->plane.x;
-    if (env->event.key.keysym.sym == SDLK_RIGHT)
+    if (env->event.key.keysym.sym != SDLK_RIGHT)
+        return (false);
+    buf = env->pl->dir.x;
+    env->pl->dir.x = env->pl->dir.x * cos(-env->pl->rotation_speed)
+            - env->pl->dir.y * sin(-env->pl->rotation_speed);
+    env->pl->dir.y = buf * sin(-env->pl->rotation_speed)
+            + env->pl->dir.y * cos(-env->pl->rotation_speed);
+    buf = env->pl->plane.x;
+    env->pl->plane.x = env->pl->plane.x * cos(-env->pl->rotation_speed)
+            - env->pl->plane.y * sin(-env->pl->rotation_speed);
+    env->pl->plane.y = buf * sin(-env->pl->rotation_speed)
+            + env->pl->plane.y * cos(-env->pl->rotation_speed);
+    return (true);
+}
+
+bool            rotate_left(t_env *env)
+{
+    double buf;
+
+    if (env->event.key.keysym.sym != SDLK_LEFT)
+        return (false);
+    buf = env->pl->dir.x;
+    env->pl->dir.x = env->pl->dir.x * cos(env->pl->rotation_speed)
+            - env->pl->dir.y * sin(env->pl->rotation_speed);
+    env->pl->dir.y =buf * sin(env->pl->rotation_speed)
+            + env->pl->dir.y * cos(env->pl->rotation_speed);
+    buf = env->pl->plane.x;
+    env->pl->plane.x = env->pl->plane.x * cos(env->pl->rotation_speed)
+            - env->pl->plane.y * sin(env->pl->rotation_speed);
+    env->pl->plane.y= buf * sin(env->pl->rotation_speed)
+            + env->pl->plane.y * cos(env->pl->rotation_speed);
+    return (true);
+
+}
+bool            move_back_forth(t_env *env)
+{
+    if (env->event.key.keysym.sym == SDLK_UP)
     {
-        env->player->dir.x = env->player->dir.x * cos(-env->player->rotation_speed) - env->player->dir.y * sin(-env->player->rotation_speed);
-        env->player->dir.y = old_dir_x * sin(-env->player->rotation_speed) + env->player->dir.y * cos(-env->player->rotation_speed);
-        env->player->plane.x = env->player->plane.x * cos(-env->player->rotation_speed) - env->player->plane.y * sin(-env->player->rotation_speed);
-        env->player->plane.y = old_plane_x * sin(-env->player->rotation_speed) + env->player->plane.y * cos(-env->player->rotation_speed);
+        if (env->map->data[(int)(env->pl->pos.x + env->pl->dir.x * env->pl->move_speed)][(int)(env->pl->pos.y)] == '0')
+            env->pl->pos.x += env->pl->dir.x * env->pl->move_speed;
+        if (env->map->data[(int)(env->pl->pos.x)][(int)(env->pl->pos.y + env->pl->dir.y * env->pl->move_speed)] == '0')
+            env->pl->pos.y += env->pl->dir.y * env->pl->move_speed;
     }
-    else if (env->event.key.keysym.sym == SDLK_LEFT)
+    else if (env->event.key.keysym.sym == SDLK_DOWN)
     {
-        env->player->dir.x = env->player->dir.x * cos(env->player->rotation_speed) - env->player->dir.y * sin(env->player->rotation_speed);
-        env->player->dir.y = old_dir_x * sin(env->player->rotation_speed) + env->player->dir.y * cos(env->player->rotation_speed);
-        env->player->plane.x = env->player->plane.x * cos(env->player->rotation_speed) - env->player->plane.y * sin(env->player->rotation_speed);
-        env->player->plane.y= old_plane_x * sin(env->player->rotation_speed) + env->player->plane.y * cos(env->player->rotation_speed);
+        if (env->map->data[(int)(env->pl->pos.x - env->pl->dir.x * env->pl->move_speed)][(int)(env->pl->pos.y)] == '0')
+            env->pl->pos.x -= env->pl->dir.x * env->pl->move_speed;
+        if (env->map->data[(int)(env->pl->pos.x)][(int)(env->pl->pos.y - env->pl->dir.y * env->pl->move_speed)] == '0')
+            env->pl->pos.y -= env->pl->dir.y * env->pl->move_speed;
     }
     else
         return (false);
     return (true);
 }
-
 void            key_down_events(t_env *env)
 {
 
     if (env->event.key.keysym.sym == SDLK_f)
     {
-        if (!env->player->accel)
+        if (!env->pl->accel)
         {
-            env->player->move_speed = 0.15;;
-            env->player->accel = true;
+            env->pl->move_speed = 0.15;;
+            env->pl->accel = true;
         }
         else
         {
-            env->player->move_speed = 0.05;;
-            env->player->accel = false;
+            env->pl->move_speed = 0.05;;
+            env->pl->accel = false;
         }
         return ;
     }
-    if (env->event.key.keysym.sym == SDLK_UP)
-    {
-        if(env->map->data[(int)(env->player->pos.x + env->player->dir.x * env->player->move_speed)][(int)(env->player->pos.y)] == '0') env->player->pos.x += env->player->dir.x * env->player->move_speed;
-        if(env->map->data[(int)(env->player->pos.x)][(int)(env->player->pos.y + env->player->dir.y * env->player->move_speed)] == '0') env->player->pos.y += env->player->dir.y * env->player->move_speed;
-    }
-    else if (env->event.key.keysym.sym == SDLK_DOWN)
-    {
-        if(env->map->data[(int)(env->player->pos.x - env->player->dir.x * env->player->move_speed)][(int)(env->player->pos.y)] == '0') env->player->pos.x -= env->player->dir.x * env->player->move_speed;
-        if(env->map->data[(int)(env->player->pos.x)][(int)(env->player->pos.y - env->player->dir.y * env->player->move_speed)] == '0') env->player->pos.y -= env->player->dir.y * env->player->move_speed;
-    } else if (!rotation_keys(env))
+    else if (!move_back_forth(env) && !rotate_right(env) && !rotate_left(env))
         return;
     raycast(env);
 }
@@ -66,23 +89,13 @@ void            mouse_down_events(t_env *env)
 {
 //    if (env->event.button.button == SDL_BUTTON_LEFT)
 //    {
-//        double  env->player->rotation_speed = 4;
-//        double oldDirX = env->player->dir_x;
-//        env->player->dir_x = env->player->dir_x * cos(env->player->rotation_speed) - env->player->dir_y * sin(env->player->rotation_speed);
-//        env->player->dir_y = oldDirX * sin(env->player->rotation_speed) + env->player->dir_y * cos(env->player->rotation_speed);
-//        double oldPlaneX = env->player->plane_x;
-//        env->player->plane_x = env->player->plane_x * cos(env->player->rotation_speed) - env->player->plane_x * sin(env->player->rotation_speed);
-//        env->player->plane_y= oldPlaneX * sin(env->player->rotation_speed) + env->player->plane_y * cos(env->player->rotation_speed);
-//    }
+//  }
 }
 
 void            mouse_up_events(t_env *env)
 {
 //    if (env.event.button.button == SDL_BUTTON_LEFT)
 //    {
-//        SDL_SetRenderDrawColor(env.renderer, 12, 200, 110, 0);
-//        SDL_RenderClear(env.renderer);
-//        SDL_RenderPresent(env.renderer);
 //    }
 }
 
@@ -90,15 +103,9 @@ void            mouse_move_events(t_env *env)
 {
 //    if (env->event.motion.type == SDL_MOUSEMOTION)
 //    {
-//        SDL_SetRenderDrawColor(env->renderer, 0, 34, 0, 0);
-//        SDL_RenderDrawPoint(env->renderer, env->event.button.x, env->event.button.y);
-//        SDL_RenderDrawPoint(env->renderer, env->event.button.x + 1, env->event.button.y);
-//        SDL_RenderDrawPoint(env->renderer, env->event.button.x - 1, env->event.button.y);
-//        SDL_RenderDrawPoint(env->renderer, env->event.button.x, env->event.button.y - 1);
-//        SDL_RenderDrawPoint(env->renderer, env->event.button.x, env->event.button.y + 1);
-//        SDL_RenderPresent(env->renderer);
 //    }
 }
+
 void            main_loop(t_env *env)
 {
     bool    close_event;
@@ -120,11 +127,11 @@ void            main_loop(t_env *env)
             }
             else if (env->event.type == SDL_KEYUP)
                 key_up_events(env);
-//            else if (env->event.type == SDL_MOUSEBUTTONDOWN)
-//                mouse_down_events(env);
-//            else if (env->event.type == SDL_MOUSEBUTTONUP)
-//                mouse_up_events(env);
-//            if (env->event.type == SDL_MOUSEMOTION)
+//          else if (env->event.type == SDL_MOUSEBUTTONDOWN)
+//              mouse_down_events(env);
+//          else if (env->event.type == SDL_MOUSEBUTTONUP)
+//              mouse_up_events(env);
+//          if (env->event.type == SDL_MOUSEMOTION)
 //                mouse_move_events(env);
         }
     }

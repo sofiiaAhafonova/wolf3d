@@ -31,8 +31,8 @@ typedef struct  s_player
     double  move_speed;
     int     screen_width;
     int     screen_height;
-    int hit; //was there a wall hit?
-    int side;
+    int     hit;
+    int     side;
     bool    accel;
 
 }               t_player;
@@ -50,8 +50,9 @@ typedef struct  s_env
     SDL_Renderer    *renderer;
     SDL_Event       event;
     t_map           *map;
-    t_player        *player;
+    t_player        *pl;
     t_color         c;
+    bool            has_texture;
 
 }               t_env;
 
@@ -61,6 +62,6 @@ t_map           *get_map(char *file_name);
 void            remove_map(t_map *map);
 void            main_loop(t_env *env);
 void            remove_env(t_env *env);
-int     raycast(t_env *e);
+int             raycast(t_env *e);
 
 #endif
