@@ -2,13 +2,20 @@
 
 int		vertical_line(int x, int drawStart, int drawEnd, t_env *e)
 {
-	SDL_SetRenderDrawColor(e->renderer, e->c.r,  e->c.g,  e->c.b, 0);
-	while (drawStart < drawEnd)
-	{
+	int i;
 
-		SDL_RenderDrawPoint(e->renderer, x ,drawStart);
-		drawStart++;
-	}
+	i = -1;
+	SDL_SetRenderDrawColor(e->renderer, 100,  100, 100, 0);
+	while (++i < drawStart)
+		SDL_RenderDrawPoint(e->renderer, x , i);
+	SDL_SetRenderDrawColor(e->renderer, e->c.r,  e->c.g,  e->c.b, 0);
+	i--;
+	while (++i < drawEnd)
+		SDL_RenderDrawPoint(e->renderer, x , i);
+	i--;
+	SDL_SetRenderDrawColor(e->renderer, 50,  50,  5, 0);
+	while (++i < e->pl->screen_height)
+		SDL_RenderDrawPoint(e->renderer, x , i);
 	return (0);
 }
 
