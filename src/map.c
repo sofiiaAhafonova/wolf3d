@@ -20,15 +20,51 @@ int    check_line(char *line, int width)
     int i;
 
     i = 0;
+    if (line[0] == '0')
+        return (0);
     while(line[i])
     {
         if (!ft_isdigit(line[i]))
             return (0);
         i++;
     }
+    if (line[i - 1] == '0')
+        return (0);
     if (width == -1 || width == i)
         return (i);
     return (0);
+}
+
+int check_horizontal_line(t_map *map)
+{
+    int     i;
+    int     j;
+    bool    has_zeroes;
+
+    i = -1;
+    has_zeroes = false;
+    while (++i < map->height)
+    {
+        j = -1;
+        while (++j < map->width)
+        {
+            if (map->data[i][j] == '0')
+                has_zeroes = true;
+            if ((i == 0 || i == map->height - 1) && map->data[i][j] == '0')
+            {
+                ft_putendl("Wrong map data");
+                remove_map(map);
+                return (0);
+            }
+        }
+    }
+    if (has_zeroes == false || map->height < 3 || map->width < 3)
+    {
+        ft_putendl("Wrong map data");
+        remove_map(map);
+        return (0);
+    }
+    return (1);
 }
 
 t_map   *create_map(t_list *lst, unsigned int width, unsigned int height)
@@ -56,6 +92,8 @@ t_map   *create_map(t_list *lst, unsigned int width, unsigned int height)
         height--;
     }
     ft_lstdel(&lst, &del_node);
+    if (!check_horizontal_line(map))
+        return (0);
     return (map);
 }
 

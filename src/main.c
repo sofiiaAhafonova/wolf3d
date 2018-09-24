@@ -9,11 +9,14 @@ int     ft_print_error(char *err)
 int     main(int argc, char **argv)
 {
     t_env *env;
-    int i = -1;
+    int i;
     char *buf;
+
+    i = -1;
     if (argc != 2)
         return (ft_print_error("Usage: ./wolf3d [map_file]"));
-    env = init_env(get_map(argv[1]));
+    if (!(env = init_env(get_map(argv[1]))))
+        return (0);
     if (env->map)
     {
         while(++i < env->map->height)

@@ -47,10 +47,11 @@ void    draw_wall(t_env *e, SDL_Point   map, int x, SDL_Point   step)
 	double perpWallDist;
 	int drawEnd;
 	int lineHeight;
+
 	if (e->pl->side == 0)
-		perpWallDist = (map.x - e->pl->pos.x + (1 - step.x) / 2) / e->pl->ray_dir.x;
+		perpWallDist = (map.x - e->pl->pos.x + (1.0 - step.x) / 2) / e->pl->ray_dir.x;
 	else
-		perpWallDist = (map.y - e->pl->pos.y + (1 - step.y) / 2) / e->pl->ray_dir.y;
+		perpWallDist = (map.y - e->pl->pos.y + (1.0 - step.y) / 2) / e->pl->ray_dir.y;
 	lineHeight = (int)(e->pl->screen_height / perpWallDist);
 	drawStart = -lineHeight / 2 + e->pl->screen_height / 2;
 	if (drawStart < 0)

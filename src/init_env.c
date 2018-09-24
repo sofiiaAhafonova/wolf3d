@@ -1,5 +1,26 @@
 #include "wolf3d.h"
 
+void    find_pos(t_env *e)
+{
+    int i;
+    int j;
+
+    i = -1;
+    while (++i < e->map->height)
+    {
+        j = -1;
+        while (++j < e->map->width)
+        {
+            if (e->map->data[i][j] == '0')
+            {
+                e->pl->pos.x = j;
+                e->pl->pos.y = i;
+                return ;
+            }
+        }
+    }
+}
+
 t_env   *init_env(t_map *m)
 {
     t_env   *env;
@@ -9,14 +30,14 @@ t_env   *init_env(t_map *m)
         remove_map(m);
         return (NULL);
     }
-    env->map = m;
+    if (!(env->map = m))
+        return (NULL);
     if (!(env->pl = (t_player*)malloc(sizeof(t_player))))
     {
         remove_env(env);
         return (NULL);
     };
-    env->pl->pos.x = 2;
-    env->pl->pos.y = 2;
+    find_pos(env);
     env->pl->dir.x = -1;
     env->pl->dir.y = 0;
     env->pl->plane.x = 0;
