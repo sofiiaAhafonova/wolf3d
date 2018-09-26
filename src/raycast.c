@@ -21,7 +21,7 @@ int		vertical_line(int x, int drawStart, int drawEnd, t_env *e)
 
 void    choose_color(t_env *e, SDL_Point map)
 {
-	if (e->map->data[map.x][map.y] == '1')
+	if (e->map->data[map.y][map.x] == '1')
 	{
 		e->c.r= 48;
 		e->c.g = 190;
@@ -123,7 +123,7 @@ SDL_Point   hit_detect(t_env *e, SDL_Point step, SDL_Point map)
 			map.y += step.y;
 			e->pl->side = 1;
 		}
-		if (e->map->data[map.x][map.y] != '0')
+		if (e->map->data[map.y][map.x] != '0')
 			e->pl->hit = 1;
 	}
 	return (map);
