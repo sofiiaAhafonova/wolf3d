@@ -23,9 +23,9 @@ void    choose_color(t_env *e, SDL_Point map)
 {
 	if (e->map->data[map.y][map.x] == '1')
 	{
-		e->c.r= 48;
-		e->c.g = 190;
-		e->c.b = 0;
+		e->c.r= (Uint8)48;
+		e->c.g = (Uint8)190;
+		e->c.b = (Uint8)0;
 	}
 	else
 	{
