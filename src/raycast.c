@@ -35,9 +35,9 @@ void    choose_color(t_env *e, SDL_Point map)
 	}
 	if (e->pl->side == 1)
 	{
-		e->c.r /= 2;
-		e->c.g /= 2;
-		e->c.b /= 2;
+		e->c.r = e->c.r >> 2;
+		e->c.g = e->c.g >> 2;
+		e->c.b =  e->c.b >> 2;
 	}
 }
 
@@ -52,6 +52,7 @@ void    draw_wall(t_env *e, SDL_Point   map, int x, SDL_Point   step)
 		perpWallDist = (map.x - e->pl->pos.x + (1.0 - step.x) / 2) / e->pl->ray_dir.x;
 	else
 		perpWallDist = (map.y - e->pl->pos.y + (1.0 - step.y) / 2) / e->pl->ray_dir.y;
+    perpWallDist = !perpWallDist ? 1 : perpWallDist;
 	lineHeight = (int)(e->pl->screen_height / perpWallDist);
 	drawStart = -lineHeight / 2 + e->pl->screen_height / 2;
 	if (drawStart < 0)
