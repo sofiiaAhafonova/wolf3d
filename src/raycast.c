@@ -72,6 +72,7 @@ void    draw_wall(t_env *e, SDL_Point   map, int x, SDL_Point   step)
 	double perpWallDist;
 	int drawEnd;
 	int lineHeight;
+    int color;
 
 	if (e->pl->side == 0)
 		perpWallDist = (map.x - e->pl->pos.x + (1.0 - step.x) / 2) / e->pl->ray_dir.x;
@@ -85,7 +86,7 @@ void    draw_wall(t_env *e, SDL_Point   map, int x, SDL_Point   step)
 	drawEnd = lineHeight / 2 + e->pl->screen_height / 2;
 	if (drawEnd >= e->pl->screen_height)
 		drawEnd = e->pl->screen_height - 1;
-	int color = get_color(e, step);
+	color = get_color(e, step);
 	if (!e->has_texture)
 		choose_color(e, map, color);
 	vertical_line(x, drawStart, drawEnd, e);
