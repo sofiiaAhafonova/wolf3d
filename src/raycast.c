@@ -18,27 +18,52 @@ int		vertical_line(int x, int drawStart, int drawEnd, t_env *e)
 		SDL_RenderDrawPoint(e->renderer, x , i);
 	return (0);
 }
+unsigned int	get_color(t_env *e, SDL_Point step)
+{
+    if (e->pl->side == 1)
+    {
+        if ((step.x == -1 || step.x == 1 )&& step.y == -1)
+            return (1);
+        if ((step.x == -1 || step.x == 1) && step.y == 1)
+            return (2);
+    }
+    if (step.x == -1 &&( step.y == -1 || step.y == 1))
+        return (3);
+    return (4);
+}
 
-void    choose_color(t_env *e, SDL_Point map)
+void    choose_color(t_env *e, SDL_Point map,  int color)
 {
 	if (e->map->data[map.y][map.x] == '1')
 	{
-		e->c.r= (Uint8)48;
-		e->c.g = (Uint8)190;
+		e->c.r= (Uint8)0;
+		e->c.g = (Uint8)152;
 		e->c.b = (Uint8)0;
+        if (color == 2)
+        {
+            e->c.r= (Uint8)0;
+            e->c.g = (Uint8)153;
+            e->c.b = (Uint8)60;
+        }
 	}
 	else
 	{
 		e->c.r= 0;
 		e->c.g = 190;
 		e->c.b = 190;
+        if (color == 2)
+        {
+            e->c.r= (Uint8)0;
+            e->c.g = (Uint8)160;
+            e->c.b = (Uint8)160;
+        }
 	}
-	if (e->pl->side == 1)
-	{
-		e->c.r = e->c.r >> 2;
-		e->c.g = e->c.g >> 2;
-		e->c.b =  e->c.b >> 2;
-	}
+    if (color == 3 || color == 4)
+    {
+        e->c.r = e->c.r >> 2;
+        e->c.g = e->c.g >> 2;
+        e->c.b =  e->c.b >> 2;
+    }
 }
 
 void    draw_wall(t_env *e, SDL_Point   map, int x, SDL_Point   step)
@@ -60,8 +85,9 @@ void    draw_wall(t_env *e, SDL_Point   map, int x, SDL_Point   step)
 	drawEnd = lineHeight / 2 + e->pl->screen_height / 2;
 	if (drawEnd >= e->pl->screen_height)
 		drawEnd = e->pl->screen_height - 1;
+	int color = get_color(e, step);
 	if (!e->has_texture)
-		choose_color(e, map);
+		choose_color(e, map, color);
 	vertical_line(x, drawStart, drawEnd, e);
 }
 

@@ -71,17 +71,17 @@ void            key_down_events(t_env *env)
     {
         if (!env->pl->accel)
         {
-            env->pl->move_speed = 0.15;;
+            env->pl->move_speed = 0.25;
             env->pl->accel = true;
         }
         else
         {
-            env->pl->move_speed = 0.05;;
+            env->pl->move_speed = 0.08;
             env->pl->accel = false;
         }
         return ;
     }
-    else if (!move_back_forth(env) && !rotate_right(env) && !rotate_left(env))
+    else if (!rotate_right(env) && !rotate_left(env) && !move_back_forth(env))
         return;
     raycast(env);
 }
