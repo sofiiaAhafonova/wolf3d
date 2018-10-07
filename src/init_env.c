@@ -48,6 +48,7 @@ t_env   *init_env(t_map *m)
     env->pl->screen_width = 1024;
     env->pl->screen_height = 512;
     env->has_texture = false;
+    env->pl->height = 1;
     SDL_Init(SDL_INIT_VIDEO);
     SDL_CreateWindowAndRenderer(env->pl->screen_width, env->pl->screen_height,
             0, &(env->window), &(env->renderer));

@@ -81,6 +81,13 @@ void            key_down_events(t_env *env)
         }
         return ;
     }
+    else if (env->event.type == SDLK_x)
+        env->pl->height = env->pl->height == 1 ? 0 : 1;
+    else if (env->event.type == SDLK_SPACE)
+    {
+        env->pl->height = env->pl->height == 1 ? 2 : 1;
+        env->pl->height = env->pl->height == 0 ? 1 : 0;
+    }
     else if (!rotate_right(env) && !rotate_left(env) && !move_back_forth(env))
         return;
     raycast(env);
@@ -132,6 +139,7 @@ void            main_loop(t_env *env)
             }
             else if (env->event.type == SDL_KEYUP)
                 key_up_events(env);
+
 //          else if (env->event.type == SDL_MOUSEBUTTONDOWN)
 //              mouse_down_events(env);
 //          else if (env->event.type == SDL_MOUSEBUTTONUP)

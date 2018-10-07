@@ -33,6 +33,7 @@ typedef struct  s_player
     int     screen_height;
     int     hit;
     int     side;
+    int     height;
     bool    accel;
 
 }               t_player;

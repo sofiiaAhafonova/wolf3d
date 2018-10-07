@@ -27,7 +27,7 @@ unsigned int	get_color(t_env *e, SDL_Point step)
         if ((step.x == -1 || step.x == 1) && step.y == 1)
             return (2);
     }
-    if (step.x == -1 &&( step.y == -1 || step.y == 1))
+    if (step.x == -1 && (step.y == -1 || step.y == 1))
         return (3);
     return (4);
 }
