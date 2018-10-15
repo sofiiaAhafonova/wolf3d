@@ -46,16 +46,16 @@ t_env   *init_env(t_map *m)
     env->pl->accel = false;
     env->pl->screen_width = 1200;
     env->pl->screen_height = 600;
-
     env->wall_texture = true;
     env->floor_texture = false;
     env->ceiling_texture = false;
     env->pl->height = 1;
     env->texture = generate_texture();
+    load_textures(env);
     if(SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO ) < 0)
         return (NULL);
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
-   if (!(env->backgroundSound = Mix_LoadMUS("music/track.mp3")))
+    if (!(env->backgroundSound = Mix_LoadMUS("music/track.mp3")))
            ft_putendl("failed load music");
     SDL_CreateWindowAndRenderer(env->pl->screen_width, env->pl->screen_height,
             0, &(env->window), &(env->renderer));

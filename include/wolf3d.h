@@ -56,10 +56,13 @@ typedef struct  s_env
     t_player        *pl;
     t_color         c;
     Uint32          **texture;
+    Uint32          floor_texture_data[TEX_HEIGHT*TEX_WIDTH];
+
     bool            wall_texture;
     bool            floor_texture;
     bool            ceiling_texture;
     Mix_Music       *backgroundSound;
+    SDL_Surface* surface;
 
 }               t_env;
 
@@ -72,7 +75,8 @@ void            remove_env(t_env *env);
 int             raycast(t_env *e);
 void            draw_ceiling(int x, int drawStart, t_env *e);
 void            draw_floor(int x, int drawEnd, t_env *e);
-
+Uint32			read_pixel(SDL_Surface *surface, const int x, const int y);
+void            load_textures(t_env *e);
 Uint32          **generate_texture(void);
 
 #endif

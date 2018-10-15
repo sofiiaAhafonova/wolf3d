@@ -102,9 +102,9 @@ void    draw_wall(t_env *e, SDL_Point map, int x, SDL_Point step)
         {
             int d = y * 256 - e->pl->screen_height * 128 + lineHeight * 128;  //256 and 128 factors to avoid floats
             int texY = ((d * TEX_HEIGHT) / lineHeight) / 256;
-            Uint32 col = e->texture[texNum][TEX_HEIGHT * texY + texX];
+            Uint32 col = e->floor_texture_data[TEX_HEIGHT * texY + texX];
             //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
-            if (color == 2) col = col & 8355711;
+            if (color == 2) col = col / 512 ;
             if(color == 3 || color == 4) col = (col >> 1) & 8355711;
             e->c.r = (col >> 16) & 0xff;
             e->c.g = (col >> 8) & 0xff;
