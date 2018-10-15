@@ -37,10 +37,14 @@ void    remove_env(t_env *env)
         free(env->pl);
     if (env->texture)
     {
-        while (++i < 8)
+        while (++i < 10)
             free(env->texture[i]);
         free(env->texture);
     }
+    if (env->backgroundSound)
+        Mix_FreeMusic(env->backgroundSound);
+
     free(env);
+    Mix_CloseAudio();
     SDL_Quit();
 }

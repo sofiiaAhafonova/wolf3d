@@ -127,6 +127,7 @@ void            main_loop(t_env *env)
     bool    close_event;
 
     close_event = false;
+    Mix_PlayMusic(env->backgroundSound, -1);
     raycast(env);
     while (!close_event)
     {

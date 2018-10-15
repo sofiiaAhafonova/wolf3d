@@ -6,8 +6,8 @@ Uint32    **generate_texture(void)
     Uint32 **texture;
 
     int i = -1;
-    texture = (Uint32**)malloc(8 * sizeof(Uint32*));
-    while (++i < 8)
+    texture = (Uint32**)malloc(10 * sizeof(Uint32*));
+    while (++i < 10)
         texture[i] = (Uint32*)malloc(TEX_HEIGHT * TEX_WIDTH * sizeof(Uint32));
     for(unsigned int x = 0; x < TEX_WIDTH; x++)
     {
@@ -24,22 +24,10 @@ Uint32    **generate_texture(void)
             texture[3][TEX_WIDTH * y + x] = 256 * xorcolor; //xor green
             texture[4][TEX_WIDTH * y + x] = 65536 * 192 * (x % 16 && y % 16); //red bricks
             texture[5][TEX_WIDTH * y + x] = 65536 * ycolor; //red gradient
-            texture[6][TEX_WIDTH * y + x] = 128 + 256 * 128 + 65536 * 128; //flat grey texture
+            texture[6][TEX_WIDTH * y + x] = 256 * xorcolor;
+            texture[8][TEX_WIDTH * y + x] = xorcolor + 256 * xorcolor + 65536 * xorcolor; //flat grey texture
+            texture[9][TEX_WIDTH * y + x] = xorcolor + 256 * xorcolor + 65536 * xorcolor;
         }
     }
     return (texture);
 }
-
-//int draw_texture(int x, int drawStart, int drawEnd, t_env *e, int line_height)
-//{
-//    for(int y = drawStart; y<drawEnd; y++)
-//    {
-//        int d = y * 256 - e->pl->screen_height * 128 + line_height * 128;  //256 and 128 factors to avoid floats
-//        // TODO: avoid the division to speed this up
-//        int texY = ((d * TEX_HEIGHT) / line_height) / 256;
-//        Uint32 color = e->texture[texNum][texHeight * texY + texX];
-//        //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
-//        if(side == 1) color = (color >> 1) & 8355711;
-//        buffer[y][x] = color;
-//    }
-//}

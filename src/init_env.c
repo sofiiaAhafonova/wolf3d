@@ -1,5 +1,4 @@
 #include "wolf3d.h"
-
 void    find_pos(t_env *e)
 {
     int i;
@@ -53,7 +52,11 @@ t_env   *init_env(t_map *m)
     env->ceiling_texture = false;
     env->pl->height = 1;
     env->texture = generate_texture();
-    SDL_Init(SDL_INIT_VIDEO);
+    if(SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO ) < 0)
+        return (NULL);
+    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+   if (!(env->backgroundSound = Mix_LoadMUS("music/track.mp3")))
+           ft_putendl("failed load music");
     SDL_CreateWindowAndRenderer(env->pl->screen_width, env->pl->screen_height,
             0, &(env->window), &(env->renderer));
     return (env);
