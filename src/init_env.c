@@ -45,10 +45,14 @@ t_env   *init_env(t_map *m)
     env->pl->rotation_speed = 0.25;
     env->pl->move_speed = 0.08;
     env->pl->accel = false;
-    env->pl->screen_width = 1024;
-    env->pl->screen_height = 512;
-    env->has_texture = false;
+    env->pl->screen_width = 1200;
+    env->pl->screen_height = 600;
+
+    env->wall_texture = true;
+    env->floor_texture = false;
+    env->ceiling_texture = false;
     env->pl->height = 1;
+    env->texture = generate_texture();
     SDL_Init(SDL_INIT_VIDEO);
     SDL_CreateWindowAndRenderer(env->pl->screen_width, env->pl->screen_height,
             0, &(env->window), &(env->renderer));

@@ -24,6 +24,9 @@ void    remove_map(t_map *map)
 
 void    remove_env(t_env *env)
 {
+    int i;
+
+    i = -1;
     if (env->map)
         remove_map(env->map);
     if (env->renderer)
@@ -32,6 +35,12 @@ void    remove_env(t_env *env)
        SDL_DestroyWindow(env->window);
     if (env->pl)
         free(env->pl);
+    if (env->texture)
+    {
+        while (++i < 8)
+            free(env->texture[i]);
+        free(env->texture);
+    }
     free(env);
     SDL_Quit();
 }

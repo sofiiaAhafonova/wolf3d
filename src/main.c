@@ -17,14 +17,6 @@ int     main(int argc, char **argv)
         return (ft_print_error("Usage: ./wolf3d [map_file]"));
     if (!(env = init_env(get_map(argv[1]))))
         return (0);
-    if (env->map)
-    {
-        while(++i < env->map->height)
-        {
-            buf = env->map->data[i];
-            ft_putendl(buf);
-        }
-    }
     system("leaks wolf3d");
     main_loop(env);
     remove_env(env);

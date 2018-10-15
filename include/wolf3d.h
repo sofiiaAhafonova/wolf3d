@@ -5,7 +5,8 @@
 #include <math.h>
 #include <stdbool.h>
 #include "libft.h"
-
+#define TEX_WIDTH 64
+#define TEX_HEIGHT 64
 typedef struct  s_map
 {
     unsigned int    height;
@@ -53,7 +54,10 @@ typedef struct  s_env
     t_map           *map;
     t_player        *pl;
     t_color         c;
-    bool            has_texture;
+    Uint32          **texture;
+    bool            wall_texture;
+    bool            floor_texture;
+    bool            ceiling_texture;
 
 }               t_env;
 
@@ -64,5 +68,10 @@ void            remove_map(t_map *map);
 void            main_loop(t_env *env);
 void            remove_env(t_env *env);
 int             raycast(t_env *e);
+int             draw_texture(int x, int drawStart, int drawEnd, t_env *e, int line_height);
+void            draw_ceiling(int x, int drawStart, t_env *e);
+void            draw_floor(int x, int drawEnd, t_env *e);
+
+Uint32          **generate_texture(void);
 
 #endif

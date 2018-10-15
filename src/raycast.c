@@ -4,17 +4,9 @@ int		vertical_line(int x, int drawStart, int drawEnd, t_env *e)
 {
 	int i;
 
-	i = -1;
-	SDL_SetRenderDrawColor(e->renderer, 100,  100, 100, 0);
-	while (++i < drawStart)
-		SDL_RenderDrawPoint(e->renderer, x , i);
+	i = drawStart;
 	SDL_SetRenderDrawColor(e->renderer, e->c.r,  e->c.g,  e->c.b, 0);
-	i--;
 	while (++i < drawEnd)
-		SDL_RenderDrawPoint(e->renderer, x , i);
-	i--;
-	SDL_SetRenderDrawColor(e->renderer, 50,  50,  5, 0);
-	while (++i < e->pl->screen_height)
 		SDL_RenderDrawPoint(e->renderer, x , i);
 	return (0);
 }
@@ -87,10 +79,53 @@ void    draw_wall(t_env *e, SDL_Point   map, int x, SDL_Point   step)
 	if (drawEnd >= e->pl->screen_height)
 		drawEnd = e->pl->screen_height - 1;
 	color = get_color(e, step);
-	if (!e->has_texture)
-		choose_color(e, map, color);
-	vertical_line(x, drawStart, drawEnd, e);
+	draw_ceiling(x, drawStart, e);
+	draw_floor(x, drawEnd, e);
+	if (!e->wall_texture)
+	{
+        choose_color(e, map, color);
+        vertical_line(x, drawStart, drawEnd, e);
+	}
+	else
+    {
+
+
+        //texturing calculations
+        int texNum = e->map->data[map.y][map.x] - '0' - 1; //1 subtracted from it so that texture 0 can be used!
+
+        //calculate value of wallX
+        double wallX; //where exactly the wall was hit
+        if (e->pl->side == 0) wallX = e->pl->pos.y + perpWallDist *  e->pl->ray_dir.y;
+        else           wallX = e->pl->pos.x + perpWallDist *  e->pl->ray_dir.x;
+        wallX -= floor((wallX));
+
+
+        //x coordinate on the texture
+        int texX = (int)(wallX * (double)TEX_WIDTH);
+        if(e->pl->side == 0 && e->pl->ray_dir.x > 0) texX = TEX_WIDTH - texX - 1;
+        if(e->pl->side == 1 && e->pl->ray_dir.y < 0) texX = TEX_WIDTH - texX - 1;
+
+        for(int y = drawStart; y < drawEnd; y++)
+        {
+            int d = y * 256 - e->pl->screen_height * 128 + lineHeight * 128;  //256 and 128 factors to avoid floats
+            // TODO: avoid the division to speed this up
+            int texY = ((d * TEX_HEIGHT) / lineHeight) / 256;
+            Uint32 col = e->texture[texNum][TEX_HEIGHT * texY + texX];
+            //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
+//            if (color == 2) col = (col >> 2);
+            if(color == 3 || color == 4) col = (col >> 1) & 8355711;
+            e->c.r = (col >> 16) & 0xff;
+            e->c.g = (col >> 8) & 0xff;
+            e->c.b = col & 0xff;
+            SDL_SetRenderDrawColor(e->renderer, e->c.r,  e->c.g, e->c.b, 0);
+            SDL_RenderDrawPoint(e->renderer, x , y);
+        }
+    }
+
+
+
 }
+
 
 SDL_Point   calc(t_env *e, int x)
 {

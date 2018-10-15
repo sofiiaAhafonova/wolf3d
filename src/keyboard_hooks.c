@@ -81,12 +81,16 @@ void            key_down_events(t_env *env)
         }
         return ;
     }
-    else if (env->event.type == SDLK_x)
-        env->pl->height = env->pl->height == 1 ? 0 : 1;
-    else if (env->event.type == SDLK_SPACE)
+//    else if (env->event.key.keysym.sym == SDLK_x)
+//        env->pl->height = env->pl->height == 1 ? 0 : 1;
+//    else if (env->event.key.keysym.sym == SDLK_SPACE)
+//    {
+//        env->pl->height = env->pl->height == 1 ? 2 : 1;
+//        env->pl->height = env->pl->height == 0 ? 1 : 0;
+//    }
+    else if (env->event.key.keysym.sym == SDLK_d)
     {
-        env->pl->height = env->pl->height == 1 ? 2 : 1;
-        env->pl->height = env->pl->height == 0 ? 1 : 0;
+        env->wall_texture =  env->wall_texture ? false : true;
     }
     else if (!rotate_right(env) && !rotate_left(env) && !move_back_forth(env))
         return;
