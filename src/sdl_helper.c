@@ -1,5 +1,5 @@
 #include <SDL.h>
-Uint32			read_pixel(SDL_Surface *surface, const int x, const int y)
+Uint32	read_pixel(SDL_Surface *surface, const int x, const int y)
 {
     int		bpp;
     uint8_t *p;

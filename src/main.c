@@ -17,7 +17,6 @@ int     main(int argc, char **argv)
         return (ft_print_error("Usage: ./wolf3d [map_file]"));
     if (!(env = init_env(get_map(argv[1]))))
         return (0);
-    system("leaks wolf3d");
     main_loop(env);
     remove_env(env);
     system("leaks wolf3d");

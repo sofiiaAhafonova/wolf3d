@@ -43,14 +43,14 @@ int check_horizontal_line(t_map *map)
 
     i = -1;
     has_zeroes = false;
-    while (++i < map->height)
+    while (++i < (int)map->height)
     {
         j = -1;
-        while (++j < map->width)
+        while (++j < (int)map->width)
         {
             if (map->data[i][j] == '0')
                 has_zeroes = true;
-            if ((i == 0 || i == map->height - 1) && map->data[i][j] == '0')
+            if ((i == 0 || i == (int)map->height - 1) && map->data[i][j] == '0')
             {
                 ft_putendl("Wrong map data");
                 remove_map(map);

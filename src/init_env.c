@@ -5,10 +5,10 @@ void    find_pos(t_env *e)
     int j;
 
     i = -1;
-    while (++i < e->map->height)
+    while (++i < (int)e->map->height)
     {
         j = -1;
-        while (++j < e->map->width)
+        while (++j <(int)e->map->width)
         {
             if (e->map->data[i][j] == '0')
             {
@@ -42,7 +42,7 @@ t_env   *init_env(t_map *m)
     env->pl->plane.x = 0;
     env->pl->plane.y = 0.66;
     env->pl->rotation_speed = 0.25;
-    env->pl->move_speed = 0.08;
+    env->pl->move_speed = 0.2;
     env->pl->accel = false;
     env->pl->screen_width = 1200;
     env->pl->screen_height = 600;
@@ -50,13 +50,13 @@ t_env   *init_env(t_map *m)
     env->floor_texture = false;
     env->ceiling_texture = false;
     env->pl->height = 1;
-    env->texture = generate_texture();
+    generate_texture(env);
     load_textures(env);
     if(SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO ) < 0)
         return (NULL);
-    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
-    if (!(env->backgroundSound = Mix_LoadMUS("music/track.mp3")))
-           ft_putendl("failed load music");
+   Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+   if (!(env->backgroundSound = Mix_LoadMUS("music/track.mp3")))
+          ft_putendl("failed load music");
     SDL_CreateWindowAndRenderer(env->pl->screen_width, env->pl->screen_height,
             0, &(env->window), &(env->renderer));
     return (env);

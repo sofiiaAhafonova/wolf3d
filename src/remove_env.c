@@ -35,15 +35,10 @@ void    remove_env(t_env *env)
        SDL_DestroyWindow(env->window);
     if (env->pl)
         free(env->pl);
-    if (env->texture)
-    {
-        while (++i < 10)
-            free(env->texture[i]);
-        free(env->texture);
-    }
-    if (env->backgroundSound)
-        Mix_FreeMusic(env->backgroundSound);
-
+   if (env->backgroundSound)
+       Mix_FreeMusic(env->backgroundSound);
+    if (env->surface)
+        SDL_FreeSurface(env->surface);
     free(env);
     Mix_CloseAudio();
     SDL_Quit();

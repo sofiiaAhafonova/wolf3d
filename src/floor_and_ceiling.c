@@ -1,5 +1,5 @@
 #include "wolf3d.h"
-#include <SDL2/SDL_image.h>
+#include <SDL_image.h>
 void     draw_ceiling(int x, int drawStart, t_env *e)
 {
     int i;
@@ -10,6 +10,7 @@ void     draw_ceiling(int x, int drawStart, t_env *e)
         SDL_SetRenderDrawColor(e->renderer, 100,  100, 100, 0);
         while (++i <= drawStart)
             SDL_RenderDrawPoint(e->renderer, x , i);
+        return ;
     }
 }
 
@@ -19,16 +20,17 @@ void     draw_floor(int x, int drawEnd, t_env *e)
 
     if (!e->floor_texture)
     {
-        i = drawEnd - 1;
+        i = drawEnd - 2;
         SDL_SetRenderDrawColor(e->renderer, 50,  50,  5, 0);
         while (++i < e->pl->screen_height)
             SDL_RenderDrawPoint(e->renderer, x , i);
+        return ;
     }
 }
 
 void load_textures(t_env *e)
 {
-    e->surface = IMG_Load("pics/eagle.png");
+    e->surface = IMG_Load("pics/wood.png");
 
     for(unsigned int x = 0; x < TEX_WIDTH; x++)
     {

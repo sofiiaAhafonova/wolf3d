@@ -71,23 +71,16 @@ void            key_down_events(t_env *env)
     {
         if (!env->pl->accel)
         {
-            env->pl->move_speed = 0.25;
+            env->pl->move_speed = 0.35;
             env->pl->accel = true;
         }
         else
         {
-            env->pl->move_speed = 0.08;
+            env->pl->move_speed = 0.2;
             env->pl->accel = false;
         }
         return ;
     }
-//    else if (env->event.key.keysym.sym == SDLK_x)
-//        env->pl->height = env->pl->height == 1 ? 0 : 1;
-//    else if (env->event.key.keysym.sym == SDLK_SPACE)
-//    {
-//        env->pl->height = env->pl->height == 1 ? 2 : 1;
-//        env->pl->height = env->pl->height == 0 ? 1 : 0;
-//    }
     else if (env->event.key.keysym.sym == SDLK_d)
     {
         env->wall_texture =  env->wall_texture ? false : true;
@@ -95,31 +88,6 @@ void            key_down_events(t_env *env)
     else if (!rotate_right(env) && !rotate_left(env) && !move_back_forth(env))
         return;
     raycast(env);
-}
-
-void            key_up_events(t_env *env)
-{
-}
-
-void            mouse_down_events(t_env *env)
-{
-//    if (env->event.button.button == SDL_BUTTON_LEFT)
-//    {
-//  }
-}
-
-void            mouse_up_events(t_env *env)
-{
-//    if (env.event.button.button == SDL_BUTTON_LEFT)
-//    {
-//    }
-}
-
-void            mouse_move_events(t_env *env)
-{
-//    if (env->event.motion.type == SDL_MOUSEMOTION)
-//    {
-//    }
 }
 
 void            main_loop(t_env *env)
@@ -142,15 +110,6 @@ void            main_loop(t_env *env)
                 else
                     key_down_events(env);
             }
-            else if (env->event.type == SDL_KEYUP)
-                key_up_events(env);
-
-//          else if (env->event.type == SDL_MOUSEBUTTONDOWN)
-//              mouse_down_events(env);
-//          else if (env->event.type == SDL_MOUSEBUTTONUP)
-//              mouse_up_events(env);
-//          if (env->event.type == SDL_MOUSEMOTION)
-//                mouse_move_events(env);
         }
     }
 }

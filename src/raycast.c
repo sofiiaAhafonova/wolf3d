@@ -57,7 +57,30 @@ void    choose_color(t_env *e, SDL_Point map,  int color)
         e->c.b =  e->c.b >> 2;
     }
 }
+void	uint_to_rgb(Uint32 col, t_env *e)
+{
+	e->c.r = (col >> 16) & 0xff;
+    e->c.g = (col >> 8) & 0xff;
+    e->c.b = col & 0xff;
+}
 
+void	generate_shades(int lineHeight, int texX, int y, int color, t_env *e)
+{
+	int d;
+    int texY;
+    Uint32 col;
+
+    d = y * 256 - e->pl->screen_height * 128 + lineHeight * 128;
+    texY = ((d * TEX_HEIGHT) / lineHeight) / 256;
+    col = e->floor_texture_data[TEX_HEIGHT * texY + texX];
+    uint_to_rgb(col, e);
+    if (color == 2)
+        e->c.r = e->c.r >> 1;
+    if(color == 3)
+		e->c.g = e->c.b >> 1;
+	if (color == 4)
+		e->c.g = e->c.g >> 1;
+}
 
 void    draw_wall(t_env *e, SDL_Point map, int x, SDL_Point step)
 {
@@ -66,6 +89,8 @@ void    draw_wall(t_env *e, SDL_Point map, int x, SDL_Point step)
 	int drawEnd;
 	int lineHeight;
     int color;
+    double wallX;
+    int texX;
 
 	if (e->pl->side == 0)
 		perpWallDist = (map.x - e->pl->pos.x + (1.0 - step.x) / 2) / e->pl->ray_dir.x;
@@ -89,29 +114,70 @@ void    draw_wall(t_env *e, SDL_Point map, int x, SDL_Point step)
 	}
 	else
     {
-		int texNum = e->map->data[map.y][map.x] - '0' - 1;
-		double wallX;
         if (e->pl->side == 0) wallX = e->pl->pos.y + perpWallDist *  e->pl->ray_dir.y;
         else           wallX = e->pl->pos.x + perpWallDist *  e->pl->ray_dir.x;
         wallX -= floor((wallX));
-        int texX = (int)(wallX * (double)TEX_WIDTH);
-        if(e->pl->side == 0 && e->pl->ray_dir.x > 0) texX = TEX_WIDTH - texX - 1;
-        if(e->pl->side == 1 && e->pl->ray_dir.y < 0) texX = TEX_WIDTH - texX - 1;
-
-        for(int y = drawStart; y < drawEnd; y++)
+        texX = (int)(wallX * (double)TEX_WIDTH);
+        if (e->pl->side == 0 && e->pl->ray_dir.x > 0)
+        	texX = TEX_WIDTH - texX - 1;
+        if (e->pl->side == 1 && e->pl->ray_dir.y < 0)
+        	texX = TEX_WIDTH - texX - 1;
+        for (int y = drawStart; y < drawEnd; y++)
         {
-            int d = y * 256 - e->pl->screen_height * 128 + lineHeight * 128;  //256 and 128 factors to avoid floats
-            int texY = ((d * TEX_HEIGHT) / lineHeight) / 256;
-            Uint32 col = e->floor_texture_data[TEX_HEIGHT * texY + texX];
-            //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
-            if (color == 2) col = col / 512 ;
-            if(color == 3 || color == 4) col = (col >> 1) & 8355711;
-            e->c.r = (col >> 16) & 0xff;
-            e->c.g = (col >> 8) & 0xff;
-            e->c.b = col & 0xff;
+            generate_shades(lineHeight, texX, y, color, e);
             SDL_SetRenderDrawColor(e->renderer, e->c.r,  e->c.g, e->c.b, 0);
             SDL_RenderDrawPoint(e->renderer, x , y);
         }
+        double floorXWall, floorYWall; //x, y position of the floor texel at the bottom of the wall
+      //4 different wall directions possible
+      if(e->pl->side == 0 && e->pl->ray_dir.x > 0)
+      {
+        floorXWall = map.x;
+        floorYWall = map.y + wallX;
+      }
+      else if(e->pl->side == 0 && e->pl->ray_dir.x < 0)
+      {
+        floorXWall = map.x + 1.0;
+        floorYWall = map.y + wallX;
+      }
+      else if(e->pl->side == 1 && e->pl->ray_dir.y > 0)
+      {
+        floorXWall = map.x + wallX;
+        floorYWall = map.y;
+      }
+      else
+      {
+        floorXWall = map.x + wallX;
+        floorYWall = map.y + 1.0;
+      }
+
+      double distWall, distPlayer, currentDist;
+
+      distWall = perpWallDist;
+      distPlayer = 0.0;
+
+      if (drawEnd < 0) drawEnd = e->pl->screen_height; //becomes < 0 when the integer overflows
+
+      //draw the floor from drawEnd to the bottom of the screen
+      for(int y = drawEnd -2; y < e->pl->screen_height; y++)
+      {
+        currentDist = e->pl->screen_height / (2.0 * y - e->pl->screen_height); //you could make a small lookup table for this instead
+
+        double weight = (currentDist - distPlayer) / (distWall - distPlayer);
+
+        double currentFloorX = weight * floorXWall + (1.0 - weight) * e->pl->pos.x;
+        double currentFloorY = weight * floorYWall + (1.0 - weight) * e->pl->pos.y;
+
+        int floorTexX, floorTexY;
+        floorTexX = (int)(currentFloorX * TEX_WIDTH) % TEX_WIDTH;
+        floorTexY = (int)(currentFloorY * TEX_HEIGHT) % TEX_HEIGHT;
+        Uint32 col = (e->floor_texture_data[TEX_WIDTH * floorTexY + floorTexX] >> 1) & 8355711;
+        uint_to_rgb(col, e);
+        SDL_SetRenderDrawColor(e->renderer, e->c.r,  e->c.g, e->c.b, 0);
+        SDL_RenderDrawPoint(e->renderer, x , y);
+        SDL_RenderDrawPoint(e->renderer, x , e->pl->screen_height - y);
+        // buffer[h - y][x] = texture[6][texWidth * floorTexY + floorTexX];
+      }
     }
 
 

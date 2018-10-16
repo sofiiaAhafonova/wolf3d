@@ -1,58 +1,54 @@
 NAME = wolf3d
 
-# Project builds and dirs
-SRCDIR = ./src/
-SRCNAMES = main.c
-SRC = $(addprefix $(SRCDIR), $(SRCNAMES))
-INC = ./include/
-BUILDDIR = ./build/
-BUILDOBJS = $(addprefix $(BUILDDIR), $(SRCNAMES:.c=.o))
+SRC_WOLF = ./src/main.c ./src/floor_and_ceiling.c ./src/init_env.c ./src/raycast.c ./src/map.c ./src/remove_env.c ./src/sdl_helper.c ./src/textures.c ./src/keyboard_hooks.c
 
-# Libft builds and dirs
-# LIBDIR = ./libft/
-# LIBFT = ./libft/libft.a
-# LIBINC = ./libft/
+OBJECT_WOLF = $(SRC_WOLF:.c=.o)
 
-# Optimization and Compiler flags and commands
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -O3
 
-# Debugging flags
-DEBUG =
+INCLUDES_WOLF = -I ./include/
 
-# Main rule
-all: $(BUILDDIR) $(LIBFT) $(NAME)
+INCLUDES_LIBFT = -I ./src/libft
 
-# Object dir rule
-$(BUILDDIR):
-	mkdir -p $(BUILDDIR)
+INCLUDES_SDL2 = -I ./src/SDL/SDL2.framework/Headers
 
-# Objects rule
-$(BUILDDIR)%.o:$(SRCDIR)%.c
-	$(CC) $(CFLAGS) -I$(LIBINC) -I$(INC) -o $@ -c $<
+INCLUDES_SDL2_IMAGE = -I ./src/SDL/SDL2_image.framework/Headers
 
-# Project file rule
-$(NAME): $(BUILDOBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(BUILDOBJS) -L/Users/sahafono/.brew/Cellar/sdl2/2.0.8/lib -lSDL2
-# $(LIBFT) -lm -lmlx -framework OpenGL -framework AppKit
+INCLUDES_SDL2_MIXER = -I ./src/SDL/SDL2_mixer.framework/Headers
 
-# Libft rule
-$(LIBFT):
-	make -C $(LIBDIR)
+LIBFT = ./src/libft/libft.a
 
-# Cleaning up the build files
+INCLUDES_SDL2_TTF = -I ./src/SDL/SDL2_ttf.framework/Headers
+
+FRAMEWORK_SDL2 = -F ./src/SDL -framework SDL2 \
+	-framework SDL2_image \
+	-framework SDL2_mixer
+
+all: $(NAME)
+
+$(NAME) : $(OBJECT_WOLF)
+	make -C ./src/libft
+	@echo "\033[0;32mWolf compiled\033[0;0m"
+	@gcc -o $(NAME) $(FLAGS) $(LIBFT) $(INCLUDES_SDL2) $(INCLUDES_SDL2_IMAGE) -rpath @loader_path/src/sdl $(FRAMEWORK_SDL2) $(OBJECT_WOLF)  $(INCLUDES_SDL2_MIXER)
+
+%.o: %.c include/*.h
+	gcc -g $(FLAGS) -o $@ -c $< $(INCLUDES_WOLF) $(INCLUDES_SDL2) $(INCLUDES_LIBFT) \
+$(INCLUDES_SDL2_IMAGE) $(INCLUDES_SDL2_TTF) $(INCLUDES_SDL2_MIXER)
+
+%.o: %.c
+	gcc -g 	$(FLAGS) -o $@ -c $< $(INCLUDES_WOLF) $(INCLUDES_SDL2) $(INCLUDES_LIBFT) \
+$(INCLUDES_SDL2_IMAGE) $(INCLUDES_SDL2_MIXER)
+
 clean:
-	rm -rf $(BUILDDIR)
-	make -C $(LIBDIR) clean
+	make -C ./src/libft clean
+	/bin/rm -f $(OBJECT_WOLF)
+	rm -f TAGS
 
-# Getting rid of the project file
 fclean: clean
-	rm -rf $(NAME)
-	make -C $(LIBDIR) fclean
+	/bin/rm -f ./src/libft/libft.a
+	/bin/rm -f $(NAME)
 
-# Do both of the above
-re: fclean all
+re: fclean all tags
 
-# Just in case those files exist in the root dir
-.PHONY: all fclean clean re
-.NOTPARALLEL:  all clean fclean re
+tags:
+	etags -R *.c *.h

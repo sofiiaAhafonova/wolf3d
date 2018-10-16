@@ -8,6 +8,7 @@
 #include "libft.h"
 #define TEX_WIDTH 64
 #define TEX_HEIGHT 64
+#define TEX_NUM 10
 typedef struct  s_map
 {
     unsigned int    height;
@@ -55,9 +56,10 @@ typedef struct  s_env
     t_map           *map;
     t_player        *pl;
     t_color         c;
-    Uint32          **texture;
+    Uint32          texture[TEX_NUM][TEX_HEIGHT*TEX_WIDTH];
+    Uint32          image_texture[TEX_NUM][TEX_HEIGHT*TEX_WIDTH];
     Uint32          floor_texture_data[TEX_HEIGHT*TEX_WIDTH];
-
+    Uint32          ceiling_texture_data[TEX_HEIGHT*TEX_WIDTH];
     bool            wall_texture;
     bool            floor_texture;
     bool            ceiling_texture;
@@ -77,6 +79,6 @@ void            draw_ceiling(int x, int drawStart, t_env *e);
 void            draw_floor(int x, int drawEnd, t_env *e);
 Uint32			read_pixel(SDL_Surface *surface, const int x, const int y);
 void            load_textures(t_env *e);
-Uint32          **generate_texture(void);
+void            generate_texture(t_env *e);
 
 #endif
