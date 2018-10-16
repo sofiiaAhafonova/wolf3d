@@ -71,13 +71,13 @@ int			check_horizontal_line(t_map *map)
 	return (check_result(map, has_zeroes));
 }
 
-t_map		*create_map(t_list *lst, unsigned int width, unsigned int height)
+t_map		*create_map(t_list *lst, unsigned int w, unsigned int h)
 {
 	t_map	*map;
 	t_list	*buf;
 
 	if (!(map = (t_map *)malloc(sizeof(t_map))) || !lst ||
-		!(map->data = (char**)malloc(sizeof(char*) * height)))
+		!(map->data = (char**)malloc(sizeof(char*) * h)))
 	{
 		map ? free(map) : 0;
 		lst ? ft_putendl("Map creating error") :
@@ -85,14 +85,14 @@ t_map		*create_map(t_list *lst, unsigned int width, unsigned int height)
 		lst ? ft_lstdel(&lst, &del_node) : 0;
 		return (NULL);
 	}
-	map->height = height;
-	map->width = width;
+	map->height = h;
+	map->width = w;
 	buf = lst;
 	while (buf)
 	{
-		map->data[map->height - height] = cp_data(buf, width);
+		map->data[map->height - h] = cp_data(buf, w);
 		buf = buf->next;
-		height--;
+		h--;
 	}
 	ft_lstdel(&lst, &del_node);
 	if (!check_horizontal_line(map))

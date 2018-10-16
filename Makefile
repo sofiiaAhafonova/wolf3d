@@ -1,6 +1,6 @@
 NAME = wolf3d
 
-SRC_WOLF = ./src/main.c ./src/floor_and_ceiling.c ./src/init_env.c ./src/raycast.c ./src/map.c ./src/remove_env.c ./src/sdl_helper.c ./src/textures.c ./src/keyboard_hooks.c
+SRC_WOLF = ./src/main.c ./src/floor_and_ceiling.c ./src/init_env.c ./src/raycast.c ./src/map.c ./src/remove_env.c ./src/sdl_helper.c ./src/textures.c ./src/keyboard_hooks.c ./src/colors_and_drawing.c
 
 OBJECT_WOLF = $(SRC_WOLF:.c=.o)
 

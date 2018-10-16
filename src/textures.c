@@ -1,30 +1,75 @@
 #include "wolf3d.h"
+#include <SDL_image.h>
 
-void    generate_texture(t_env *e)
+Uint32				*load_textures(char *title)
 {
-    unsigned int xorcolor;
-    unsigned int ycolor;
-    unsigned int xycolor;
-    int x;
-    int y;
+	Uint32			*texture;
+	SDL_Surface		*surface;
+	unsigned int	x;
+	unsigned int	y;
 
-    x = -1;
-    y = -1;
-    while (++x < TEX_WIDTH)
-        while (++y < TEX_HEIGHT)
-        {
-            xorcolor = (x * 256 / TEX_WIDTH) ^ (y * 256 / TEX_HEIGHT);
-            ycolor = y * 256 / TEX_HEIGHT;
-            xycolor = y * 128 / TEX_HEIGHT + x * 128 / TEX_WIDTH;
-            e->texture[0][TEX_WIDTH * y + x] = xycolor + 256 * xycolor + 65536 * xycolor;
-            e->texture[1][TEX_WIDTH * y + x] = 256 * xycolor + 65536 * xycolor;
-            e->texture[2][TEX_WIDTH * y + x] = xorcolor + 256 * xorcolor + 65536 * xorcolor;
-            e->texture[3][TEX_WIDTH * y + x] = 256 * xorcolor;
-            e->texture[4][TEX_WIDTH * y + x] = 65536 * 192 * (x % 16 && y % 16);
-            e->texture[5][TEX_WIDTH * y + x] = 65536 * ycolor;
-            e->texture[6][TEX_WIDTH * y + x] = 256 * xorcolor;
-            e->texture[7][TEX_WIDTH * y + x] = 65536 * 254 * (x != y && x != TEX_WIDTH - y);
-            e->texture[8][TEX_WIDTH * y + x] = xorcolor + 256 * xorcolor + 65536 * xorcolor;
-            e->texture[9][TEX_WIDTH * y + x] = xorcolor + 256 * xorcolor + 65536 * xorcolor;
-        }
+	texture = (Uint32*)malloc(sizeof(Uint32) * TEX_HEIGHT * TEX_WIDTH);
+	surface = IMG_Load(title);
+	if (!surface)
+		return (NULL);
+	x = 0;
+	while (x < TEX_WIDTH)
+	{
+		y = 0;
+		while (y < TEX_HEIGHT)
+		{
+			texture[TEX_WIDTH * y + x] = read_pixel(surface, x, y);
+			x++;
+		}
+		y++;
+	}
+	SDL_FreeSurface(surface);
+	return (texture);
+}
+
+void				uint_to_rgb(Uint32 col, t_env *e)
+{
+	e->c.r = (col >> 16) & 0xff;
+	e->c.g = (col >> 8) & 0xff;
+	e->c.b = col & 0xff;
+}
+
+void				floor_val(t_env *e, SDL_Point map)
+{
+	 if (e->pl->side == 0 && e->pl->ray_dir.x > 0)
+	  {
+		e->floor_wall.x = map.x;
+		e->floor_wall.y = map.y + e->wall.x;
+	  }
+	  else if (e->pl->side == 0 && e->pl->ray_dir.x < 0)
+	  {
+		e->floor_wall.x = map.x + 1.0;
+		e->floor_wall.y = map.y + e->wall.x;
+	  }
+	  else if (e->pl->side == 1 && e->pl->ray_dir.y > 0)
+	  {
+		e->floor_wall.x = map.x + e->wall.x;
+		e->floor_wall.y = map.y;
+	  }
+	  else
+	  {
+		e->floor_wall.x = map.x + e->wall.x;
+		e->floor_wall.y = map.y + 1.0;
+	  }
+}
+
+void				load_images(t_env *e)
+{
+   e->floor_texture_data = load_textures("pics/redbrick.png");
+   e->ceiling_texture_data = load_textures("pics/wood.png");
+   e->texture[0] = load_textures("pics/wood.png");
+   e->texture[1] = load_textures("pics/eagle.png");
+   e->texture[2] = load_textures("pics/colorstone.png");
+   e->texture[3] = load_textures("pics/bluestone.png");
+   e->texture[4] = load_textures("pics/greystone.png");
+   e->texture[5] = load_textures("pics/redbrick.png");
+   e->texture[6] = load_textures("pics/purplestone.png");
+   e->texture[7] = load_textures("pics/mossy.png");
+   e->texture[8] = load_textures("pics/wood.png");
+   e->texture[9] = load_textures("pics/wood.png");
 }
