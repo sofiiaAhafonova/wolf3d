@@ -19,9 +19,9 @@ Uint32				*load_textures(char *title)
 		while (y < TEX_HEIGHT)
 		{
 			texture[TEX_WIDTH * y + x] = read_pixel(surface, x, y);
-			x++;
+			y++;
 		}
-		y++;
+		x++;
 	}
 	SDL_FreeSurface(surface);
 	return (texture);
