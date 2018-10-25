@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   remove_env.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sahafono <sahafono@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/10/25 13:50:31 by sahafono          #+#    #+#             */
+/*   Updated: 2018/10/25 13:50:33 by sahafono         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf3d.h"
 
 void	del_node(void *cont, size_t size)
@@ -35,8 +47,8 @@ void	remove_env(t_env *env)
 		SDL_DestroyWindow(env->window);
 	if (env->pl)
 		free(env->pl);
-	if (env->backgroundSound)
-		Mix_FreeMusic(env->backgroundSound);
+	if (env->background_sound)
+		Mix_FreeMusic(env->background_sound);
 	while (++i < TEX_NUM)
 		free(env->texture[i]);
 	if (env->floor_texture_data)

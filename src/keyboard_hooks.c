@@ -1,10 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   keyboard_hooks.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sahafono <sahafono@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/10/25 13:45:00 by sahafono          #+#    #+#             */
+/*   Updated: 2018/10/25 13:45:05 by sahafono         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf3d.h"
 
 bool			rotate_right(t_env *env)
 {
 	double buf;
 
-	if (env->event.key.keysym.sym != SDLK_RIGHT)
+	if (env->event.key.keysym.sym != SDLK_RIGHT &&
+		env->event.key.keysym.sym != SDLK_d)
 		return (false);
 	buf = env->pl->dir.x;
 	env->pl->dir.x = env->pl->dir.x * cos(-env->pl->rotation_speed)
@@ -23,7 +36,8 @@ bool			rotate_left(t_env *env)
 {
 	double buf;
 
-	if (env->event.key.keysym.sym != SDLK_LEFT)
+	if (env->event.key.keysym.sym != SDLK_LEFT &&
+		env->event.key.keysym.sym != SDLK_a)
 		return (false);
 	buf = env->pl->dir.x;
 	env->pl->dir.x = env->pl->dir.x * cos(env->pl->rotation_speed)
@@ -40,7 +54,8 @@ bool			rotate_left(t_env *env)
 
 bool			move_back_forth(t_env *env)
 {
-	if (env->event.key.keysym.sym == SDLK_UP)
+	if (env->event.key.keysym.sym == SDLK_UP ||
+		env->event.key.keysym.sym == SDLK_w)
 	{
 		if (env->map->data[(int)(env->pl->pos.y)][(int)
 			(env->pl->pos.x + env->pl->dir.x * env->pl->move_speed)] == '0')
@@ -50,7 +65,8 @@ bool			move_back_forth(t_env *env)
 			(int)(env->pl->pos.x)] == '0')
 			env->pl->pos.y += env->pl->dir.y * env->pl->move_speed;
 	}
-	else if (env->event.key.keysym.sym == SDLK_DOWN)
+	else if (env->event.key.keysym.sym == SDLK_DOWN ||
+		env->event.key.keysym.sym == SDLK_s)
 	{
 		if (env->map->data[(int)(env->pl->pos.y)][(int)
 			(env->pl->pos.x - env->pl->dir.x * env->pl->move_speed)] == '0')
@@ -66,7 +82,7 @@ bool			move_back_forth(t_env *env)
 
 void			key_down_events(t_env *env)
 {
-	if (env->event.key.keysym.sym == SDLK_f)
+	if (env->event.key.keysym.sym == SDLK_r)
 	{
 		if (!env->pl->accel)
 		{
@@ -80,7 +96,7 @@ void			key_down_events(t_env *env)
 		}
 		return ;
 	}
-	else if (env->event.key.keysym.sym == SDLK_d)
+	else if (env->event.key.keysym.sym == SDLK_t)
 	{
 		env->wall_texture = env->wall_texture ? false : true;
 		env->floor_texture = env->floor_texture ? false : true;
@@ -96,7 +112,7 @@ void			main_loop(t_env *env)
 	bool		close_event;
 
 	close_event = false;
-	Mix_PlayMusic(env->backgroundSound, -1);
+	Mix_PlayMusic(env->background_sound, -1);
 	raycast(env);
 	while (!close_event)
 	{

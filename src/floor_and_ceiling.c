@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   floor_and_ceiling.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sahafono <sahafono@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/10/25 13:49:04 by sahafono          #+#    #+#             */
+/*   Updated: 2018/10/25 13:49:08 by sahafono         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf3d.h"
 #include <SDL_image.h>
 
@@ -19,8 +31,8 @@ void		inner_loop(t_env *e, int y, int x, t_floor f)
 {
 	Uint32	col;
 
-	f.currentDist = e->pl->screen_height / (2.0 * y - e->pl->screen_height);
-	f.weight = (f.currentDist - f.distPlayer) / (f.distWall - f.distPlayer);
+	f.current_dist = e->pl->screen_height / (2.0 * y - e->pl->screen_height);
+	f.weight = (f.current_dist - f.dist_player) / (f.dist_wall - f.dist_player);
 	f.current_floor.x = f.weight * e->floor_wall.x +
 	(1.0 - f.weight) * e->pl->pos.x;
 	f.current_floor.y = f.weight * e->floor_wall.y +
@@ -38,12 +50,12 @@ void		inner_loop(t_env *e, int y, int x, t_floor f)
 	SDL_RenderDrawPoint(e->renderer, x, e->pl->screen_height - y);
 }
 
-void		draw_floor(int x, int drawEnd, t_env *e, SDL_Point map)
+void		draw_floor(int x, int draw_end, t_env *e, SDL_Point map)
 {
 	int		y;
 	t_floor	f;
-	
-	y = drawEnd + 1;
+
+	y = draw_end + 1;
 	if (!e->floor_texture)
 	{
 		SDL_SetRenderDrawColor(e->renderer, 50, 50, 5, 0);
@@ -55,10 +67,10 @@ void		draw_floor(int x, int drawEnd, t_env *e, SDL_Point map)
 		return ;
 	}
 	floor_val(e, map);
-	f.distWall = e->perpWallDist;
-	f.distPlayer = 0.0;
-	if (drawEnd < 0)
-		drawEnd = e->pl->screen_height;
+	f.dist_wall = e->perp_wall_dist;
+	f.dist_player = 0.0;
+	if (draw_end < 0)
+		draw_end = e->pl->screen_height;
 	while (y < e->pl->screen_height)
 	{
 		inner_loop(e, y, x, f);

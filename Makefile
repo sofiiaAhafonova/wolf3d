@@ -42,13 +42,9 @@ $(INCLUDES_SDL2_IMAGE) $(INCLUDES_SDL2_MIXER)
 clean:
 	make -C ./src/libft clean
 	/bin/rm -f $(OBJECT_WOLF)
-	rm -f TAGS
 
 fclean: clean
 	/bin/rm -f ./src/libft/libft.a
 	/bin/rm -f $(NAME)
 
-re: fclean all tags
-
-tags:
-	etags -R *.c *.h
+re: fclean all

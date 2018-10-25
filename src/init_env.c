@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_env.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sahafono <sahafono@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/10/25 13:49:26 by sahafono          #+#    #+#             */
+/*   Updated: 2018/10/25 13:49:28 by sahafono         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf3d.h"
 
 void		find_pos(t_env *e)
@@ -55,12 +67,12 @@ t_env		*init_env(t_map *m)
 	{
 		remove_env(env);
 		return (NULL);
-	};
+	}
 	init_const_vals(env);
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 		return (NULL);
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
-	if (!(env->backgroundSound = Mix_LoadMUS("music/track.mp3")))
+	if (!(env->background_sound = Mix_LoadMUS("music/track.mp3")))
 		ft_putendl("failed load music");
 	SDL_CreateWindowAndRenderer(env->pl->screen_width, env->pl->screen_height,
 			0, &(env->window), &(env->renderer));

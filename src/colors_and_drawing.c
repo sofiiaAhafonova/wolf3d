@@ -1,70 +1,106 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   colors_and_drawing.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sahafono <sahafono@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/10/25 13:47:54 by sahafono          #+#    #+#             */
+/*   Updated: 2018/10/25 13:47:59 by sahafono         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf3d.h"
 
-void			generate_shades(int y, t_env *e)
+void			choose_color_end(t_env *e, SDL_Point map)
 {
-	int			d;
-	Uint32		col;
-
-	d = y * 256 - e->pl->screen_height * 128 + e->lineHeight * 128;
-	e->tex.y = ((d * TEX_HEIGHT) / e->lineHeight) / 256;
-	col = e->texture[e->text_num][TEX_HEIGHT * e->tex.y + e->tex.x];
-	uint_to_rgb(col, e);
+	if (e->map->data[map.y][map.x] == '9')
+	{
+		e->c.r = 89;
+		e->c.g = 136;
+		e->c.b = 109;
+	}
 	if (e->color == 2)
-		e->c.r = e->c.r >> 1;
-	if (e->color == 3)
-		e->c.g = e->c.b >> 1;
-	if (e->color == 4)
+	{
+		e->c.r = e->c.r > 0 ? e->c.r >> 2 : 28;
+		e->c.b = e->c.b >> 1;
 		e->c.g = e->c.g >> 1;
+	}
+	if (e->color == 3)
+		e->c.g = e->c.g >> 2;
+	if (e->color == 4)
+		e->c.b = e->c.b >> 2;
 }
 
-unsigned int	get_color(t_env *e, SDL_Point step)
+void			choose_color_mid(t_env *e, SDL_Point map)
 {
-	if (e->pl->side == 1)
+	if (e->map->data[map.y][map.x] == '5')
 	{
-		if ((step.x == -1 || step.x == 1) && step.y == -1)
-			return (1);
-		if ((step.x == -1 || step.x == 1) && step.y == 1)
-			return (2);
+		e->c.r = 96;
+		e->c.g = 187;
+		e->c.b = 6;
 	}
-	if (step.x == -1 && (step.y == -1 || step.y == 1))
-		return (3);
-	return (4);
+	else if (e->map->data[map.y][map.x] == '6')
+	{
+		e->c.r = 241;
+		e->c.g = 128;
+		e->c.b = 48;
+	}
+	else if (e->map->data[map.y][map.x] == '7')
+	{
+		e->c.r = 232;
+		e->c.g = 254;
+		e->c.b = 109;
+	}
+	else if (e->map->data[map.y][map.x] == '8')
+	{
+		e->c.r = 241;
+		e->c.g = 128;
+		e->c.b = 48;
+	}
+	choose_color_end(e, map);
 }
 
 void			choose_color(t_env *e, SDL_Point map)
 {
-	e->c.r = 0;
 	if (e->map->data[map.y][map.x] == '1')
 	{
-		e->c.g = 152;
-		e->c.b = 0;
-		if (e->color == 2)
-			e->c.b = 60;
+		e->c.g = 146;
+		e->c.b = 147;
+		e->c.r = 0;
 	}
-	else
+	else if (e->map->data[map.y][map.x] == '2')
 	{
-		e->c.g = 190;
-		e->c.b = 190;
-		if (e->color == 2)
-			e->c.g = 160;
+		e->c.g = 47;
+		e->c.b = 31;
+		e->c.r = 100;
 	}
-	if (e->color == 3 || e->color == 4)
+	else if (e->map->data[map.y][map.x] == '3')
 	{
-		e->c.g = e->c.g >> 2;
-		e->c.b = e->c.b >> 2;
+		e->c.g = 203;
+		e->c.b = 255;
+		e->c.r = 4;
 	}
+	else if (e->map->data[map.y][map.x] == '4')
+	{
+		e->c.g = 92;
+		e->c.b = 9;
+		e->c.r = 241;
+	}
+	choose_color_mid(e, map);
 }
 
-int				vertical_line(int x, t_int_point draw_point, t_env *e, SDL_Point map)
+int				vertical_line(int x, t_int_point draw_point, t_env *e,
+								SDL_Point map)
 {
 	int			y;
 
 	y = draw_point.x;
 	e->text_num = e->map->data[map.y][map.x] - '0' - 1;
 	if (e->pl->side == 0)
-		e->wall.x = e->pl->pos.y + e->perpWallDist * e->pl->ray_dir.y;
+		e->wall.x = e->pl->pos.y + e->perp_wall_dist * e->pl->ray_dir.y;
 	else
-		e->wall.x = e->pl->pos.x + e->perpWallDist * e->pl->ray_dir.x;
+		e->wall.x = e->pl->pos.x + e->perp_wall_dist * e->pl->ray_dir.x;
 	e->wall.x -= floor(e->wall.x);
 	e->tex.x = (int)(e->wall.x * (double)TEX_WIDTH);
 	if (e->pl->side == 0 && e->pl->ray_dir.x > 0)
@@ -86,19 +122,19 @@ void			draw_wall(t_env *e, SDL_Point map, int x, SDL_Point step)
 	t_int_point		draw_point;
 
 	if (e->pl->side == 0)
-		e->perpWallDist = (map.x - e->pl->pos.x +
+		e->perp_wall_dist = (map.x - e->pl->pos.x +
 			(1.0 - step.x) / 2) / e->pl->ray_dir.x;
 	else
-		e->perpWallDist = (map.y - e->pl->pos.y +
+		e->perp_wall_dist = (map.y - e->pl->pos.y +
 			(1.0 - step.y) / 2) / e->pl->ray_dir.y;
-	e->perpWallDist = !e->perpWallDist ? 1 : e->perpWallDist;
-	e->lineHeight = (int)(e->pl->screen_height / e->perpWallDist);
-	draw_point.x = -e->lineHeight / 2 + e->pl->screen_height / 2;
+	e->perp_wall_dist = !e->perp_wall_dist ? 1 : e->perp_wall_dist;
+	e->line_height = (int)(e->pl->screen_height / e->perp_wall_dist);
+	draw_point.x = -e->line_height / 2 + e->pl->screen_height / 2;
 	if (draw_point.x < 0)
 		draw_point.x = 0;
-	draw_point.y = e->lineHeight / 2 + e->pl->screen_height / 2;
+	draw_point.y = e->line_height / 2 + e->pl->screen_height / 2;
 	if (draw_point.y >= e->pl->screen_height)
-		draw_point.y= e->pl->screen_height - 1;
+		draw_point.y = e->pl->screen_height - 1;
 	e->color = get_color(e, step);
 	if (!e->wall_texture)
 		choose_color(e, map);
