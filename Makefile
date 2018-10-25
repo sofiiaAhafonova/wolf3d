@@ -29,7 +29,7 @@ all: $(NAME)
 $(NAME) : $(OBJECT_WOLF)
 	make -C ./src/libft
 	@echo "\033[0;32mWolf compiled\033[0;0m"
-	@gcc -o $(NAME) $(FLAGS) $(LIBFT) $(INCLUDES_SDL2) $(INCLUDES_SDL2_IMAGE) -rpath @loader_path/src/sdl $(FRAMEWORK_SDL2) $(OBJECT_WOLF)  $(INCLUDES_SDL2_MIXER)
+	@gcc -o $(NAME) $(FLAGS) $(LIBFT) $(INCLUDES_SDL2) $(INCLUDES_SDL2_IMAGE) -rpath @loader_path/src/sdl $(FRAMEWORK_SDL2) $(OBJECT_WOLF) $(INCLUDES_SDL2_MIXER) $(INCLUDES_SDL2_TTF)
 
 %.o: %.c include/*.h
 	gcc -g $(FLAGS) -o $@ -c $< $(INCLUDES_WOLF) $(INCLUDES_SDL2) $(INCLUDES_LIBFT) \
@@ -37,7 +37,7 @@ $(INCLUDES_SDL2_IMAGE) $(INCLUDES_SDL2_TTF) $(INCLUDES_SDL2_MIXER)
 
 %.o: %.c
 	gcc -g 	$(FLAGS) -o $@ -c $< $(INCLUDES_WOLF) $(INCLUDES_SDL2) $(INCLUDES_LIBFT) \
-$(INCLUDES_SDL2_IMAGE) $(INCLUDES_SDL2_MIXER)
+$(INCLUDES_SDL2_IMAGE) $(INCLUDES_SDL2_TTF) $(INCLUDES_SDL2_MIXER)
 
 clean:
 	make -C ./src/libft clean
