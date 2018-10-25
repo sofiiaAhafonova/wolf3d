@@ -58,10 +58,11 @@ bool			move_back_forth(t_env *env)
 		env->event.key.keysym.sym == SDLK_w)
 	{
 		if (env->map->data[(int)(env->pl->pos.y)][(int)
-			(env->pl->pos.x + env->pl->dir.x * env->pl->move_speed)] == '0')
+			(env->pl->pos.x + env->pl->dir.x *
+			(env->pl->move_speed + 0.5))] == '0')
 			env->pl->pos.x += env->pl->dir.x * env->pl->move_speed;
 		if (env->map->data[(int)(env->pl->pos.y +
-			env->pl->dir.y * env->pl->move_speed)][
+			env->pl->dir.y * (env->pl->move_speed + 0.5))][
 			(int)(env->pl->pos.x)] == '0')
 			env->pl->pos.y += env->pl->dir.y * env->pl->move_speed;
 	}
@@ -86,7 +87,7 @@ void			key_down_events(t_env *env)
 	{
 		if (!env->pl->accel)
 		{
-			env->pl->move_speed = 0.35;
+			env->pl->move_speed = 0.5;
 			env->pl->accel = true;
 		}
 		else

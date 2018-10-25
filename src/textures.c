@@ -20,14 +20,16 @@ void				generate_shades(int y, t_env *e)
 
 	d = y * 256 - e->pl->screen_height * 128 + e->line_height * 128;
 	e->tex.y = ((d * TEX_HEIGHT) / e->line_height) / 256;
+	if (e->color == 2)
+		e->text_num += 1;
+	else if (e->color == 3)
+		e->text_num += 2;
+	else if (e->color == 4)
+		e->text_num += 3;
+	if (e->text_num >= TEX_NUM)
+		e->text_num -= 3;
 	col = e->texture[e->text_num][TEX_HEIGHT * e->tex.y + e->tex.x];
 	uint_to_rgb(col, e);
-	if (e->color == 2)
-		e->c.r = e->c.r >> 1;
-	if (e->color == 3)
-		e->c.g = e->c.b >> 1;
-	if (e->color == 4)
-		e->c.g = e->c.g >> 1;
 }
 
 unsigned int		get_color(t_env *e, SDL_Point step)
@@ -98,14 +100,14 @@ void				load_images(t_env *e)
 {
 	e->floor_texture_data = load_textures("pics/redbrick.png");
 	e->ceiling_texture_data = load_textures("pics/wood.png");
-	e->texture[0] = load_textures("pics/wood.png");
+	e->texture[0] = load_textures("pics/WALL75.png");
 	e->texture[1] = load_textures("pics/eagle.png");
 	e->texture[2] = load_textures("pics/colorstone.png");
 	e->texture[3] = load_textures("pics/bluestone.png");
 	e->texture[4] = load_textures("pics/greystone.png");
-	e->texture[5] = load_textures("pics/redbrick.png");
+	e->texture[5] = load_textures("pics/WALL65.png");
 	e->texture[6] = load_textures("pics/purplestone.png");
 	e->texture[7] = load_textures("pics/mossy.png");
-	e->texture[8] = load_textures("pics/wood.png");
-	e->texture[9] = load_textures("pics/wood.png");
+	e->texture[8] = load_textures("pics/WALL35.png");
+	e->texture[9] = load_textures("pics/WALL19.png");
 }

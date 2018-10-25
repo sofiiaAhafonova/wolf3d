@@ -111,7 +111,7 @@ void				remove_env(t_env *env);
 int					raycast(t_env *e);
 void				draw_ceiling(int x, int draw_start, t_env *e);
 void				draw_floor(int x, int draw_end, t_env *e, SDL_Point map);
-Uint32				read_pixel(SDL_Surface *surface, const int x, const int y);
+Uint32				read_pixel(SDL_Surface *surf, const int x, const int y);
 void				load_images(t_env *e);
 void				uint_to_rgb(Uint32 col, t_env *e);
 void				floor_val(t_env *e, SDL_Point map);

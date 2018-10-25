@@ -66,11 +66,14 @@ int					main(int argc, char **argv)
 {
 	t_env			*env;
 	int				i;
+	t_map			*map;
 
 	i = -1;
 	if (argc != 2)
 		return (ft_print_error("Usage: ./wolf3d [map_file]"));
-	if (!(env = init_env(get_map(argv[1]))))
+	if (!(map = get_map(argv[1])))
+		return (0);
+	if (!(env = init_env(map)))
 		return (0);
 	ft_putendl("KEYHOOKS\n\tMOVEMENTS: arrows/wsda\n\tRUN: r\n\tTEXTURE: t");
 	main_loop(env);

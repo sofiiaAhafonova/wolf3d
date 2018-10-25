@@ -25,8 +25,8 @@ void		find_pos(t_env *e)
 		{
 			if (e->map->data[i][j] == '0')
 			{
-				e->pl->pos.x = j;
-				e->pl->pos.y = i;
+				e->pl->pos.x = j + 0.5;
+				e->pl->pos.y = i + 0.5;
 				return ;
 			}
 		}
@@ -40,7 +40,7 @@ void		init_const_vals(t_env *env)
 	env->pl->dir.y = 0;
 	env->pl->plane.x = 0;
 	env->pl->plane.y = 0.66;
-	env->pl->rotation_speed = 0.33;
+	env->pl->rotation_speed = 0.25;
 	env->pl->move_speed = 0.2;
 	env->pl->accel = false;
 	env->pl->screen_width = 1200;
