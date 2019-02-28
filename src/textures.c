@@ -96,18 +96,25 @@ void				floor_val(t_env *e, SDL_Point map)
 	}
 }
 
-void				load_images(t_env *e)
+int				load_images(t_env *e)
 {
-	e->floor_texture_data = load_textures("pics/redbrick.png");
-	e->ceiling_texture_data = load_textures("pics/wood.png");
-	e->texture[0] = load_textures("pics/WALL75.png");
-	e->texture[1] = load_textures("pics/eagle.png");
-	e->texture[2] = load_textures("pics/colorstone.png");
-	e->texture[3] = load_textures("pics/bluestone.png");
-	e->texture[4] = load_textures("pics/greystone.png");
-	e->texture[5] = load_textures("pics/WALL65.png");
-	e->texture[6] = load_textures("pics/purplestone.png");
-	e->texture[7] = load_textures("pics/mossy.png");
-	e->texture[8] = load_textures("pics/WALL35.png");
-	e->texture[9] = load_textures("pics/WALL19.png");
+	if (!IMG_Init(IMG_INIT_PNG) ||
+		!(e->floor_texture_data = load_textures("pics/redbrick.png")) ||
+		!(e->ceiling_texture_data = load_textures("pics/wood.png")) ||
+		!(e->texture[0] = load_textures("pics/WALL75.png")) ||
+		!(e->texture[1] = load_textures("pics/eagle.png")) ||
+		!(e->texture[2] = load_textures("pics/colorstone.png")) ||
+		!(e->texture[3] = load_textures("pics/bluestone.png")) ||
+		!(e->texture[4] = load_textures("pics/greystone.png")) ||
+		!(e->texture[5] = load_textures("pics/WALL65.png")) ||
+		!(e->texture[6] = load_textures("pics/purplestone.png")) ||
+		!(e->texture[7] = load_textures("pics/mossy.png")) ||
+		!(e->texture[8] = load_textures("pics/WALL35.png")) ||
+		!(e->texture[9] = load_textures("pics/WALL19.png")) )
+	{
+		ft_putendl(IMG_GetError());
+		return (0);
+
+	}
+	return (1);
 }
