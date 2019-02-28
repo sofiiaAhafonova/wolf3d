@@ -71,7 +71,7 @@ t_env		*init_env(t_map *m)
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0 || !load_images(env))
 		return (NULL);
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
-	if (!(env->background_sound = Mix_LoadMUS("track.mp3")))
+	if (!(env->background_sound = Mix_LoadMUS("music/track.mp3")))
 		ft_putendl(Mix_GetError());
 	SDL_CreateWindowAndRenderer(env->pl->screen_width, env->pl->screen_height,
 			0, &(env->window), &(env->renderer));
